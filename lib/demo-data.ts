@@ -8,12 +8,12 @@ import type { Procurement, Supplier, Bid, AuditEvent, LessonLearned, User } from
 
 // ─── Demo Users ───────────────────────────────────────────────────────────────
 export const DEMO_USERS: User[] = [
-  { id: 'u1', email: 'thabo@procuretech.co.za',  full_name: 'Thabo Mokoena',   role: 'procurement_officer', organisation_id: 'org1', created_at: '2024-01-15T08:00:00Z' },
-  { id: 'u2', email: 'naledi@procuretech.co.za', full_name: 'Naledi Dlamini',  role: 'manager',             organisation_id: 'org1', created_at: '2024-01-10T08:00:00Z' },
-  { id: 'u3', email: 'sipho@procuretech.co.za',  full_name: 'Sipho Khumalo',   role: 'cfo',                 organisation_id: 'org1', created_at: '2024-01-05T08:00:00Z' },
-  { id: 'u4', email: 'admin@procuretech.co.za',  full_name: 'Admin User',      role: 'admin',               organisation_id: 'org1', created_at: '2024-01-01T08:00:00Z' },
-  { id: 'u5', email: 'legal@procuretech.co.za',  full_name: 'Zanele Motha',    role: 'legal',               organisation_id: 'org1', created_at: '2024-01-10T08:00:00Z' },
-  { id: 'u6', email: 'supplier@mecer.co.za',     full_name: 'Johan van Wyk',   role: 'supplier',            organisation_id: 'org1', created_at: '2024-02-01T08:00:00Z' },
+  { id: 'u1', email: 'thabo@procuretech.co.za',  full_name: 'Thabo Mokoena',   role: 'procurement_officer', organisation_id: 'org1', created_at: '2025-03-10T08:00:00Z' },
+  { id: 'u2', email: 'naledi@procuretech.co.za', full_name: 'Naledi Dlamini',  role: 'manager',             organisation_id: 'org1', created_at: '2025-02-14T08:00:00Z' },
+  { id: 'u3', email: 'sipho@procuretech.co.za',  full_name: 'Sipho Khumalo',   role: 'cfo',                 organisation_id: 'org1', created_at: '2025-01-20T08:00:00Z' },
+  { id: 'u4', email: 'admin@procuretech.co.za',  full_name: 'Admin User',      role: 'admin',               organisation_id: 'org1', created_at: '2025-01-05T08:00:00Z' },
+  { id: 'u5', email: 'legal@procuretech.co.za',  full_name: 'Zanele Motha',    role: 'legal',               organisation_id: 'org1', created_at: '2025-04-01T08:00:00Z' },
+  { id: 'u6', email: 'supplier@mecer.co.za',     full_name: 'Johan van Wyk',   role: 'supplier',            organisation_id: 'org1', created_at: '2026-01-08T08:00:00Z' },
 ];
 
 // ─── Demo Procurements ────────────────────────────────────────────────────────

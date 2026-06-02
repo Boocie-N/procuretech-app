@@ -152,7 +152,7 @@ export default function SettingsPage() {
       />
 
       <div className="flex-1 overflow-y-auto p-6">
-        <Tabs defaultValue={isSupplier ? 'notifs' : 'profile'} className="max-w-3xl">
+        <Tabs defaultValue={isSupplier ? 'notifs' : 'profile'}>
           <TabsList className="mb-6">
             {!isSupplier && <TabsTrigger value="profile"  className="gap-1.5"><User className="w-3.5 h-3.5" /> Profile</TabsTrigger>}
             {!isSupplier && <TabsTrigger value="org"      className="gap-1.5"><Building2 className="w-3.5 h-3.5" /> Organisation</TabsTrigger>}
@@ -163,7 +163,7 @@ export default function SettingsPage() {
           </TabsList>
 
           {/* ── Profile ── */}
-          <TabsContent value="profile">
+          <TabsContent value="profile" className="max-w-3xl">
             <div className="bg-white dark:bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] shadow-sm p-6 space-y-6">
               {/* Avatar */}
               <div className="flex items-center gap-5">
@@ -245,7 +245,7 @@ export default function SettingsPage() {
           </TabsContent>
 
           {/* ── Organisation ── */}
-          <TabsContent value="org">
+          <TabsContent value="org" className="max-w-3xl">
             <div className="bg-white dark:bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] shadow-sm p-6 space-y-5">
               <div>
                 <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Organisation Details</h3>
@@ -311,7 +311,7 @@ export default function SettingsPage() {
           </TabsContent>
 
           {/* ── Notifications ── */}
-          <TabsContent value="notifs">
+          <TabsContent value="notifs" className="max-w-3xl">
             <div className="bg-white dark:bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] shadow-sm overflow-hidden">
               <div className="px-6 py-3 border-b border-[var(--border-default)] grid grid-cols-3 bg-gray-50 dark:bg-white/5">
                 <span className="text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Event</span>
@@ -354,7 +354,7 @@ export default function SettingsPage() {
           </TabsContent>
 
           {/* ── Approval Workflow ── */}
-          <TabsContent value="workflow">
+          <TabsContent value="workflow" className="max-w-3xl">
             <div className="bg-white dark:bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] shadow-sm p-6">
               <div className="mb-5">
                 <h3 className="text-sm font-semibold text-[var(--text-primary)]">Approval Chain Configuration</h3>
@@ -403,67 +403,72 @@ export default function SettingsPage() {
                 </div>
 
                 {/* Users table */}
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-b border-[var(--border-default)] bg-gray-50 dark:bg-white/5">
-                        <th className="text-left px-6 py-3 text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Name</th>
-                        <th className="text-left px-4 py-3 text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Email</th>
-                        <th className="text-left px-4 py-3 text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Role</th>
-                        <th className="text-left px-4 py-3 text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider w-32">Joined</th>
-                        <th className="text-right px-6 py-3 text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider w-28">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {users.map((u, idx) => {
-                        const initials = u.full_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
-                        const isSelf = u.id === user?.id;
-                        const isLastAdmin = u.role === 'admin' && adminCount <= 1;
-                        const canRemove = !isSelf && !isLastAdmin;
-                        return (
-                          <tr key={u.id} className={`border-b border-[var(--border-default)] hover:bg-gray-50 dark:hover:bg-white/5 ${idx === users.length - 1 ? 'border-b-0' : ''}`}>
-                            <td className="px-6 py-3">
-                              <div className="flex items-center gap-2.5">
-                                <div className={cn('w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0', ROLE_AVATAR_COLORS[u.role])}>
-                                  {initials}
-                                </div>
-                                <div>
-                                  <div className="text-sm font-medium text-[var(--text-primary)]">{u.full_name}</div>
-                                  {isSelf && <div className="text-[10px] text-[var(--text-tertiary)]">You</div>}
-                                </div>
+                <table className="w-full text-sm table-fixed">
+                  <colgroup>
+                    <col className="w-[28%]" />
+                    <col className="w-[30%]" />
+                    <col className="w-[20%]" />
+                    <col className="w-[12%]" />
+                    <col className="w-[10%]" />
+                  </colgroup>
+                  <thead>
+                    <tr className="border-b border-[var(--border-default)] bg-gray-50 dark:bg-white/5">
+                      <th className="text-left px-6 py-3 text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Name</th>
+                      <th className="text-left px-4 py-3 text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Email</th>
+                      <th className="text-left px-4 py-3 text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Role</th>
+                      <th className="text-left px-4 py-3 text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Joined</th>
+                      <th className="text-right px-6 py-3 text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {users.map((u, idx) => {
+                      const initials = u.full_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+                      const isSelf = u.id === user?.id;
+                      const isLastAdmin = u.role === 'admin' && adminCount <= 1;
+                      const canRemove = !isSelf && !isLastAdmin;
+                      return (
+                        <tr key={u.id} className={`border-b border-[var(--border-default)] hover:bg-gray-50 dark:hover:bg-white/5 ${idx === users.length - 1 ? 'border-b-0' : ''}`}>
+                          <td className="px-6 py-3">
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <div className={cn('w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0', ROLE_AVATAR_COLORS[u.role])}>
+                                {initials}
                               </div>
-                            </td>
-                            <td className="px-4 py-3 text-sm text-[var(--text-secondary)]">{u.email}</td>
-                            <td className="px-4 py-3">
-                              <span className={cn('text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full whitespace-nowrap', ROLE_BADGE_COLORS[u.role])}>
-                                {ROLE_LABELS[u.role]}
+                              <div className="flex items-center gap-1.5 min-w-0">
+                                <span className="text-sm font-medium text-[var(--text-primary)] truncate">{u.full_name}</span>
+                                {isSelf && <span className="text-[10px] text-[var(--text-tertiary)] shrink-0">(You)</span>}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 text-sm text-[var(--text-secondary)] truncate">{u.email}</td>
+                          <td className="px-4 py-3">
+                            <span className={cn('text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full whitespace-nowrap', ROLE_BADGE_COLORS[u.role])}>
+                              {ROLE_LABELS[u.role]}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-xs text-[var(--text-tertiary)] whitespace-nowrap">
+                            {new Date(u.created_at).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          </td>
+                          <td className="px-6 py-3 text-right">
+                            {canRemove ? (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="h-7 text-xs text-red-500 border-red-200 hover:bg-red-50 dark:hover:bg-red-900/20 gap-1"
+                                onClick={() => setConfirmRemoveId(u.id)}
+                              >
+                                <Trash2 className="w-3 h-3" /> Remove
+                              </Button>
+                            ) : (
+                              <span className="text-[10px] text-[var(--text-tertiary)] whitespace-nowrap">
+                                {isSelf ? 'Current user' : 'Last admin'}
                               </span>
-                            </td>
-                            <td className="px-4 py-3 text-xs text-[var(--text-tertiary)]">
-                              {new Date(u.created_at).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' })}
-                            </td>
-                            <td className="px-6 py-3 text-right">
-                              {canRemove ? (
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  className="h-7 text-xs text-red-500 border-red-200 hover:bg-red-50 dark:hover:bg-red-900/20 gap-1"
-                                  onClick={() => setConfirmRemoveId(u.id)}
-                                >
-                                  <Trash2 className="w-3 h-3" /> Remove
-                                </Button>
-                              ) : (
-                                <span className="text-[10px] text-[var(--text-tertiary)]">
-                                  {isSelf ? 'Current user' : 'Last admin'}
-                                </span>
-                              )}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
 
               {/* Add User dialog */}
@@ -542,7 +547,7 @@ export default function SettingsPage() {
           )}
 
           {/* ── Security ── */}
-          <TabsContent value="security">
+          <TabsContent value="security" className="max-w-3xl">
             <div className="bg-white dark:bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] shadow-sm p-6 space-y-5">
               <div>
                 <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Change Password</h3>
