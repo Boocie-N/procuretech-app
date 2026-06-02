@@ -7,56 +7,164 @@ import { DEMO_USERS } from '@/lib/demo-data';
 import { ROLE_LABELS } from '@/lib/utils';
 import type { UserRole } from '@/types';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Logomark } from '@/components/logomark';
 import {
   ShieldCheck, Users, TrendingUp, Bot, Link2, BookOpen,
-  ArrowRight, CheckCircle2, Building2,
+  ArrowRight, Check,
+  LayoutDashboard, Scale, Banknote, Building2, Settings,
 } from 'lucide-react';
 
-const ROLE_COLORS: Record<UserRole, string> = {
-  admin:                'border-purple-200 bg-purple-50 hover:border-purple-400 dark:border-purple-800 dark:bg-purple-900/20',
-  procurement_officer:  'border-blue-200 bg-blue-50 hover:border-blue-400 dark:border-blue-800 dark:bg-blue-900/20',
-  manager:              'border-indigo-200 bg-indigo-50 hover:border-indigo-400 dark:border-indigo-800 dark:bg-indigo-900/20',
-  cfo:                  'border-green-200 bg-green-50 hover:border-green-400 dark:border-green-800 dark:bg-green-900/20',
-  legal:                'border-amber-200 bg-amber-50 hover:border-amber-400 dark:border-amber-800 dark:bg-amber-900/20',
-  supplier:             'border-gray-200 bg-gray-50 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800/20',
-};
+// ── Role meta ────────────────────────────────────────────────────────────────
 
-const ROLE_BADGE_COLORS: Record<UserRole, string> = {
-  admin:                'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
-  procurement_officer:  'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
-  manager:              'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300',
-  cfo:                  'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
-  legal:                'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-  supplier:             'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300',
-};
-
-const ROLE_DESCRIPTIONS: Record<UserRole, string> = {
-  admin:                'Full platform access — users, settings, all procurements, global oversight.',
-  procurement_officer:  'Creates and manages procurements, generates RFQ/RFP/Tenders, AI Copilot access.',
-  manager:              'Reviews and approves procurements, full pipeline visibility, deviation sign-off.',
-  cfo:                  'Financial approval authority, spend analytics, budget management.',
-  legal:                'Contract review and approval, compliance oversight.',
-  supplier:             'Supplier portal — view RFQs, submit bids, manage company profile and documents.',
+const ROLE_META: Record<UserRole, {
+  icon: React.ElementType;
+  color: string;
+  avatarBg: string;
+  avatarText: string;
+  badge: string;
+  desc: string;
+}> = {
+  admin: {
+    icon: Settings,
+    color: 'border-violet-200 bg-violet-50 hover:bg-violet-100 dark:border-violet-800 dark:bg-violet-900/20 dark:hover:bg-violet-900/30',
+    avatarBg: 'bg-violet-600',
+    avatarText: 'text-white',
+    badge: 'bg-violet-100 text-violet-700',
+    desc: 'Full system access, user management, global oversight',
+  },
+  procurement_officer: {
+    icon: LayoutDashboard,
+    color: 'border-blue-200 bg-blue-50 hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-900/20 dark:hover:bg-blue-900/30',
+    avatarBg: 'bg-[#1A56DB]',
+    avatarText: 'text-white',
+    badge: 'bg-blue-100 text-blue-700',
+    desc: 'Create procurements, generate documents, AI Copilot',
+  },
+  manager: {
+    icon: Users,
+    color: 'border-indigo-200 bg-indigo-50 hover:bg-indigo-100 dark:border-indigo-800 dark:bg-indigo-900/20 dark:hover:bg-indigo-900/30',
+    avatarBg: 'bg-indigo-600',
+    avatarText: 'text-white',
+    badge: 'bg-indigo-100 text-indigo-700',
+    desc: 'Approve procurements, team oversight, deviation sign-off',
+  },
+  cfo: {
+    icon: Banknote,
+    color: 'border-emerald-200 bg-emerald-50 hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-900/20 dark:hover:bg-emerald-900/30',
+    avatarBg: 'bg-emerald-600',
+    avatarText: 'text-white',
+    badge: 'bg-emerald-100 text-emerald-700',
+    desc: 'Financial approval authority, spend analytics',
+  },
+  legal: {
+    icon: Scale,
+    color: 'border-amber-200 bg-amber-50 hover:bg-amber-100 dark:border-amber-800 dark:bg-amber-900/20 dark:hover:bg-amber-900/30',
+    avatarBg: 'bg-amber-500',
+    avatarText: 'text-white',
+    badge: 'bg-amber-100 text-amber-700',
+    desc: 'Contract review, compliance oversight',
+  },
+  supplier: {
+    icon: Building2,
+    color: 'border-teal-200 bg-teal-50 hover:bg-teal-100 dark:border-teal-800 dark:bg-teal-900/20 dark:hover:bg-teal-900/30',
+    avatarBg: 'bg-teal-600',
+    avatarText: 'text-white',
+    badge: 'bg-teal-100 text-teal-700',
+    desc: 'View RFQs, submit bids, manage documents',
+  },
 };
 
 const FEATURES = [
-  { icon: Bot,        label: 'AI Copilot',          desc: 'Generate SOW, RFQ, RFP & Tender docs' },
-  { icon: TrendingUp, label: 'Market Intelligence',  desc: 'Live price benchmarking (ZAR)' },
-  { icon: ShieldCheck,label: 'BBBEE Compliance',     desc: 'PPPFA 2017 preferential scoring' },
-  { icon: Link2,      label: 'Blockchain Audit',     desc: 'Immutable, tamper-proof audit trail' },
-  { icon: Users,      label: 'Supplier Portal',      desc: 'Verified, graded supplier network' },
-  { icon: BookOpen,   label: 'Knowledge Base',       desc: 'Lessons learned & best practices' },
+  { icon: Bot,         label: 'AI Copilot',         desc: 'Generate SOW, RFQ, RFP & Tender docs in seconds' },
+  { icon: TrendingUp,  label: 'Market Intelligence', desc: 'Live ZAR price benchmarking & savings tracking' },
+  { icon: ShieldCheck, label: 'BBBEE Compliance',    desc: 'PPPFA 2017 preferential procurement scoring' },
+  { icon: Link2,       label: 'Blockchain Audit',    desc: 'Immutable, tamper-proof SHA-256 audit trail' },
+  { icon: Users,       label: 'Supplier Network',    desc: 'Verified, graded supplier portal' },
+  { icon: BookOpen,    label: 'Knowledge Base',      desc: 'Lessons learned & CIPS best practices' },
 ];
+
+// ── Procurement background SVG ───────────────────────────────────────────────
+
+function ProcurementGraphic() {
+  return (
+    <svg
+      viewBox="0 0 600 600"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="absolute inset-0 w-full h-full object-cover"
+      aria-hidden="true"
+    >
+      {/* Supply chain nodes — circles */}
+      {[
+        [80, 120], [200, 80], [340, 100], [480, 80], [540, 200],
+        [460, 320], [520, 440], [380, 500], [220, 490], [100, 400],
+        [60, 270], [170, 210], [310, 240], [440, 220], [300, 380],
+      ].map(([cx, cy], i) => (
+        <circle key={i} cx={cx} cy={cy} r={i % 3 === 0 ? 28 : i % 3 === 1 ? 18 : 12} stroke="white" strokeWidth="1.5" fill="none" />
+      ))}
+
+      {/* Node dots */}
+      {[
+        [80, 120], [200, 80], [340, 100], [480, 80], [540, 200],
+        [460, 320], [520, 440], [380, 500], [220, 490], [100, 400],
+        [60, 270], [170, 210], [310, 240], [440, 220], [300, 380],
+      ].map(([cx, cy], i) => (
+        <circle key={`d${i}`} cx={cx} cy={cy} r={4} fill="white" />
+      ))}
+
+      {/* Connecting lines */}
+      {[
+        [80,120,200,80], [200,80,340,100], [340,100,480,80], [480,80,540,200],
+        [540,200,460,320], [460,320,520,440], [520,440,380,500], [380,500,220,490],
+        [220,490,100,400], [100,400,60,270], [60,270,80,120],
+        [170,210,310,240], [310,240,440,220], [170,210,100,400],
+        [310,240,300,380], [440,220,460,320], [300,380,380,500],
+        [200,80,170,210], [340,100,310,240], [480,80,440,220],
+      ].map(([x1,y1,x2,y2], i) => (
+        <line key={`l${i}`} x1={x1} y1={y1} x2={x2} y2={y2} stroke="white" strokeWidth="0.8" strokeDasharray={i % 4 === 0 ? '6 4' : 'none'} />
+      ))}
+
+      {/* Document shapes */}
+      {[[130, 290], [390, 160], [250, 330], [470, 390]].map(([x, y], i) => (
+        <g key={`doc${i}`}>
+          <rect x={x} y={y} width={44} height={56} rx={4} stroke="white" strokeWidth="1.2" fill="none" />
+          <line x1={x+8} y1={y+16} x2={x+36} y2={y+16} stroke="white" strokeWidth="1" />
+          <line x1={x+8} y1={y+26} x2={x+36} y2={y+26} stroke="white" strokeWidth="1" />
+          <line x1={x+8} y1={y+36} x2={x+26} y2={y+36} stroke="white" strokeWidth="1" />
+          <path d={`M${x+32} ${y} L${x+44} ${y+12} L${x+32} ${y+12} Z`} stroke="white" strokeWidth="1" fill="none" />
+        </g>
+      ))}
+
+      {/* Bar chart shapes */}
+      {[[50, 450], [460, 120]].map(([bx, by], i) => (
+        <g key={`bar${i}`}>
+          {[0,1,2,3].map(j => (
+            <rect key={j} x={bx + j*14} y={by + [24,10,30,16][j]} width={10} height={[18,32,12,26][j]} rx={2} stroke="white" strokeWidth="1" fill="none" />
+          ))}
+        </g>
+      ))}
+
+      {/* Truck icon shapes */}
+      {[[270, 430], [130, 150]].map(([tx, ty]) => (
+        <g key={`truck${tx}`}>
+          <rect x={tx} y={ty} width={52} height={30} rx={3} stroke="white" strokeWidth="1.2" fill="none" />
+          <rect x={tx+36} y={ty+6} width={24} height={24} rx={3} stroke="white" strokeWidth="1.2" fill="none" />
+          <circle cx={tx+14} cy={ty+33} r={6} stroke="white" strokeWidth="1.2" fill="none" />
+          <circle cx={tx+46} cy={ty+33} r={6} stroke="white" strokeWidth="1.2" fill="none" />
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+// ── Page ─────────────────────────────────────────────────────────────────────
 
 export default function LoginPage() {
   const [selected, setSelected] = useState<string | null>(null);
   const { login, user, isLoading } = useAuth();
   const router = useRouter();
 
-  // Already logged in — skip login screen
   useEffect(() => {
     if (!isLoading && user) {
       router.replace(user.role === 'supplier' ? '/supplier-portal' : '/dashboard');
@@ -66,41 +174,132 @@ export default function LoginPage() {
   function handleEnter() {
     if (!selected) return;
     login(selected);
-    // Suppliers go to their own portal
-    const user = DEMO_USERS.find(u => u.id === selected);
-    router.push(user?.role === 'supplier' ? '/supplier-portal' : '/dashboard');
+    const selectedUser = DEMO_USERS.find(u => u.id === selected);
+    router.push(selectedUser?.role === 'supplier' ? '/supplier-portal' : '/dashboard');
   }
 
-  // Non-supplier users for the main grid
-  const internalUsers = DEMO_USERS.filter(u => u.role !== 'supplier');
-  const supplierUser  = DEMO_USERS.find(u => u.role === 'supplier');
-
   return (
-    <div className="min-h-screen bg-[var(--bg-base)] dark:bg-[var(--bg-base)] flex">
+    <div className="min-h-screen bg-[var(--bg-base)] flex">
 
-      {/* Left panel — branding & features */}
-      <div className="hidden lg:flex flex-col w-[420px] shrink-0 bg-[var(--brand-blue)] text-white p-10 relative overflow-hidden">
-        {/* Pattern */}
-        <div className="absolute inset-0 opacity-10"
-          style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }}
+      {/* ── Left panel — role selector ── */}
+      <div className="flex-1 flex flex-col items-center justify-center p-8 lg:p-12 overflow-y-auto">
+        <div className="w-full max-w-md">
+
+          {/* Mobile logo */}
+          <div className="lg:hidden flex items-center gap-2.5 mb-8">
+            <Logomark size={32} />
+            <div className="font-bold text-[var(--text-primary)]">
+              ProcureTech<span className="text-[var(--brand-blue)]">+</span>
+            </div>
+          </div>
+
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Sign in to your workspace</h1>
+            <p className="text-sm text-[var(--text-secondary)]">
+              Select a demo persona to explore the platform.
+            </p>
+          </div>
+
+          {/* Role list */}
+          <div className="space-y-2 mb-6">
+            {DEMO_USERS.map(u => {
+              const meta = ROLE_META[u.role];
+              const Icon = meta.icon;
+              const initials = u.full_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+              const isSelected = selected === u.id;
+
+              return (
+                <button
+                  key={u.id}
+                  onClick={() => setSelected(u.id)}
+                  className={cn(
+                    'w-full flex items-center gap-4 px-4 py-3.5 rounded-xl border-2 transition-all duration-150 text-left',
+                    meta.color,
+                    isSelected
+                      ? 'shadow-md ring-2 ring-[var(--brand-blue)] ring-offset-1 border-transparent dark:ring-offset-gray-900'
+                      : 'shadow-none'
+                  )}
+                >
+                  {/* Avatar */}
+                  <div className={cn('w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-sm font-bold', meta.avatarBg, meta.avatarText)}>
+                    {initials}
+                  </div>
+
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-sm font-semibold text-[var(--text-primary)] truncate">{u.full_name}</span>
+                      <span className={cn('text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full shrink-0', meta.badge)}>
+                        {ROLE_LABELS[u.role]}
+                      </span>
+                    </div>
+                    <p className="text-xs text-[var(--text-secondary)] truncate">{meta.desc}</p>
+                  </div>
+
+                  {/* Selection indicator */}
+                  <div className={cn(
+                    'w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all',
+                    isSelected
+                      ? 'bg-[var(--brand-blue)] border-[var(--brand-blue)]'
+                      : 'border-gray-300 dark:border-gray-600'
+                  )}>
+                    {isSelected && <Check className="w-3 h-3 text-white" />}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          <Button
+            onClick={handleEnter}
+            disabled={!selected}
+            className={cn(
+              'w-full h-11 text-sm font-semibold gap-2 transition-all',
+              selected
+                ? 'bg-[var(--brand-blue)] hover:bg-[var(--brand-blue-dark)] text-white shadow-md'
+                : 'bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-gray-800 dark:text-gray-600'
+            )}
+          >
+            Enter Platform
+            <ArrowRight className="w-4 h-4" />
+          </Button>
+
+          <p className="text-center text-xs text-[var(--text-tertiary)] mt-4">
+            Demo version · No real data is used or stored externally
+          </p>
+        </div>
+      </div>
+
+      {/* ── Right panel — branding ── */}
+      <div className="hidden lg:flex flex-col w-[440px] shrink-0 bg-[var(--brand-blue)] text-white p-10 relative overflow-hidden">
+        {/* Low-opacity procurement graphic */}
+        <div className="absolute inset-0 opacity-[0.04]">
+          <ProcurementGraphic />
+        </div>
+
+        {/* Dot grid overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.07]"
+          style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '28px 28px' }}
         />
+
         <div className="relative z-10 flex flex-col h-full">
           {/* Logo */}
           <div className="flex items-center gap-3 mb-12">
             <Logomark size={40} />
             <div>
-              <div className="font-bold text-xl leading-none">ProcureTech<span className="opacity-60">+</span></div>
+              <div className="font-bold text-xl leading-none">ProcureTech<span className="opacity-70">+</span></div>
               <div className="text-xs text-blue-200 mt-0.5 uppercase tracking-wider">AI Procurement OS</div>
             </div>
           </div>
 
           {/* Headline */}
           <div className="mb-10">
-            <h2 className="text-3xl font-bold leading-tight mb-3">
-              Africa's most intelligent procurement platform
+            <h2 className="text-3xl font-bold leading-tight mb-4">
+              South Africa's first intelligent procurement platform
             </h2>
             <p className="text-blue-200 text-sm leading-relaxed">
-              AI-powered procurement from requirement to contract award. Built on CIPS best practices, PPPFA compliance, and blockchain transparency.
+              AI-powered procurement from requirement to contract award — built on CIPS best practices, PPPFA compliance, and blockchain transparency.
             </p>
           </div>
 
@@ -126,98 +325,6 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Right panel — role selector */}
-      <div className="flex-1 flex flex-col items-center justify-center p-6 lg:p-10 overflow-y-auto">
-        <div className="w-full max-w-xl">
-
-          {/* Mobile logo */}
-          <div className="lg:hidden flex items-center gap-2 mb-8">
-            <Logomark size={32} />
-            <div className="font-bold text-[var(--text-primary)]">ProcureTech<span className="text-[var(--brand-blue)]">+</span></div>
-          </div>
-
-          <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-1">Select your role</h1>
-          <p className="text-sm text-[var(--text-secondary)] mb-7">
-            This is a demo — choose any role to explore its capabilities and permissions.
-          </p>
-
-          {/* Internal role cards */}
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            {internalUsers.map(user => (
-              <button
-                key={user.id}
-                onClick={() => setSelected(user.id)}
-                className={cn(
-                  'relative text-left p-4 rounded-xl border-2 transition-all duration-150',
-                  ROLE_COLORS[user.role],
-                  selected === user.id ? 'ring-2 ring-[var(--brand-blue)] ring-offset-2 dark:ring-offset-gray-900' : '',
-                )}
-              >
-                {selected === user.id && (
-                  <CheckCircle2 className="absolute top-3 right-3 w-4 h-4 text-[var(--brand-blue)]" />
-                )}
-                <div className="mb-2">
-                  <span className={cn('text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full', ROLE_BADGE_COLORS[user.role])}>
-                    {ROLE_LABELS[user.role]}
-                  </span>
-                </div>
-                <div className="font-semibold text-sm text-[var(--text-primary)] mb-1">{user.full_name}</div>
-                <div className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
-                  {ROLE_DESCRIPTIONS[user.role]}
-                </div>
-              </button>
-            ))}
-          </div>
-
-          {/* Supplier card — full width */}
-          {supplierUser && (
-            <button
-              onClick={() => setSelected(supplierUser.id)}
-              className={cn(
-                'relative w-full text-left p-4 rounded-xl border-2 transition-all duration-150 mb-6',
-                ROLE_COLORS[supplierUser.role],
-                selected === supplierUser.id ? 'ring-2 ring-[var(--brand-blue)] ring-offset-2 dark:ring-offset-gray-900' : '',
-              )}
-            >
-              {selected === supplierUser.id && (
-                <CheckCircle2 className="absolute top-3 right-3 w-4 h-4 text-[var(--brand-blue)]" />
-              )}
-              <div className="flex items-start gap-3">
-                <Building2 className="w-5 h-5 text-[var(--text-secondary)] mt-0.5 shrink-0" />
-                <div>
-                  <div className="mb-1">
-                    <span className={cn('text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full', ROLE_BADGE_COLORS['supplier'])}>
-                      Supplier Portal
-                    </span>
-                  </div>
-                  <div className="font-semibold text-sm text-[var(--text-primary)] mb-1">{supplierUser.full_name} — Mecer IT Solutions</div>
-                  <div className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
-                    {ROLE_DESCRIPTIONS['supplier']} Register, upload compliance documents, and view RFQs you've been invited to.
-                  </div>
-                </div>
-              </div>
-            </button>
-          )}
-
-          <Button
-            onClick={handleEnter}
-            disabled={!selected}
-            className={cn(
-              'w-full h-11 text-sm font-medium gap-2 transition-all',
-              selected
-                ? 'bg-[var(--brand-blue)] hover:bg-[var(--brand-blue-dark)] text-white'
-                : 'bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-gray-800 dark:text-gray-600'
-            )}
-          >
-            Enter Platform
-            <ArrowRight className="w-4 h-4" />
-          </Button>
-
-          <p className="text-center text-xs text-[var(--text-tertiary)] mt-4">
-            Demo version · No real data is used or stored externally
-          </p>
-        </div>
-      </div>
     </div>
   );
 }
