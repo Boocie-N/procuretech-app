@@ -18,6 +18,8 @@ import {
   PROVINCE_LABELS,
 } from '@/lib/utils';
 import type { ApprovalStep, Bid } from '@/types';
+import { generateEvaluationPDF } from '@/lib/export';
+import { toast } from 'sonner';
 
 const CATEGORY_LABELS: Record<string, string> = {
   it_equipment: 'IT Equipment', office_supplies: 'Office Supplies', construction: 'Construction',
@@ -344,9 +346,20 @@ export default function ProcurementDetailPage({ params }: { params: Promise<{ id
                     View Audit Trail
                   </Button>
                 </Link>
-                <Button variant="outline" size="sm" className="w-full justify-start gap-2 h-9 text-xs">
+                <Button
+                  variant="outline" size="sm"
+                  className="w-full justify-start gap-2 h-9 text-xs"
+                  onClick={async () => {
+                    if (bids.length > 0) {
+                      await generateEvaluationPDF(procurement, bids);
+                      toast.success('Evaluation report downloaded');
+                    } else {
+                      toast.info('No bids to include in report yet');
+                    }
+                  }}
+                >
                   <FileText className="w-4 h-4 text-gray-500" />
-                  Download RFQ PDF
+                  Download Evaluation PDF
                 </Button>
               </div>
             </div>

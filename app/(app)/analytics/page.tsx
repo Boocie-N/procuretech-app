@@ -9,6 +9,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
 import { toast } from 'sonner';
+import { exportAnalyticsCSV } from '@/lib/export';
 
 // ─── Chart Data ───────────────────────────────────────────────────────────────
 
@@ -139,10 +140,10 @@ export default function AnalyticsPage() {
               variant="outline"
               size="sm"
               className="h-8 text-xs gap-1.5"
-              onClick={() => toast.success('Analytics report exported')}
+              onClick={() => { exportAnalyticsCSV(); toast.success('Analytics exported to CSV'); }}
             >
               <Download className="w-3.5 h-3.5" />
-              Export
+              Export CSV
             </Button>
           </div>
         }

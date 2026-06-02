@@ -7,7 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Send, Bot, User, FileText, TrendingUp, ShieldCheck, Scale, Building2, Lightbulb, Copy, Download, RefreshCw } from 'lucide-react';
+import { Send, Bot, User, FileText, TrendingUp, ShieldCheck, Scale, Building2, Lightbulb, Copy, Download, RefreshCw, CheckCheck, ExternalLink } from 'lucide-react';
+import { DEMO_PROCUREMENTS } from '@/lib/demo-data';
+import { generateSOWPDF } from '@/lib/export';
 import { toast } from 'sonner';
 
 interface Message {
@@ -15,6 +17,20 @@ interface Message {
   content: string;
   timestamp: Date;
   mode?: string;
+  isDocument?: boolean; // marks long-form generated documents
+}
+
+// Detect if the user's message is requesting a document generation
+function detectMode(text: string): string {
+  const lower = text.toLowerCase();
+  if (lower.match(/\b(rfq|request for quotation)\b/)) return 'rfq';
+  if (lower.match(/\b(rfp|request for proposal)\b/)) return 'rfp';
+  if (lower.match(/\b(tender|tender document|bid document)\b/)) return 'rfp';
+  if (lower.match(/\b(sow|scope of work|terms of reference|tor)\b/)) return 'sow';
+  if (lower.match(/\b(evaluat|score|recommend|compare.*bid|bid.*compare)\b/)) return 'evaluation';
+  if (lower.match(/\b(recommendation report|award report)\b/)) return 'report';
+  if (lower.match(/\b(market|price|benchmark|cost|rate)\b/)) return 'market';
+  return 'chat';
 }
 
 const QUICK_PROMPTS = [
@@ -73,6 +89,9 @@ export default function CopilotPage() {
     const text = input.trim();
     if (!text || isLoading) return;
 
+    const mode = detectMode(text);
+    const isDocMode = ['rfq', 'rfp', 'sow', 'evaluation', 'report'].includes(mode);
+
     const userMsg: Message = { role: 'user', content: text, timestamp: new Date() };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
@@ -80,8 +99,14 @@ export default function CopilotPage() {
 
     try {
       const history = [...messages, userMsg].map(m => ({ role: m.role, content: m.content }));
-      const response = await callAI(history, 'chat');
-      setMessages(prev => [...prev, { role: 'assistant', content: response, timestamp: new Date() }]);
+      const response = await callAI(history, mode);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: response,
+        timestamp: new Date(),
+        mode,
+        isDocument: isDocMode && response.length > 400,
+      }]);
     } catch (e) {
       toast.error('AI request failed. Check your API key in .env.local');
       setMessages(prev => [...prev, {
@@ -92,6 +117,21 @@ export default function CopilotPage() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  async function downloadMessagePDF(msg: Message) {
+    const title = msg.mode === 'rfq' ? 'Request for Quotation' :
+                  msg.mode === 'rfp' ? 'Request for Proposal' :
+                  msg.mode === 'sow' ? 'Scope of Work' : 'AI Generated Document';
+    await generateSOWPDF(title, msg.content, `AI/PT/${new Date().getFullYear()}/${Date.now().toString().slice(-3)}`);
+    toast.success('Document downloaded as PDF');
+  }
+
+  function linkToProcurement(content: string) {
+    // In a real implementation this would open a modal to pick a procurement
+    // For demo, navigate to new procurement with the content pre-filled
+    toast.success('Content copied — paste into the SOW field when creating a new procurement', { duration: 5000 });
+    navigator.clipboard.writeText(content);
   }
 
   function handleKey(e: React.KeyboardEvent) {
@@ -161,9 +201,25 @@ export default function CopilotPage() {
                       {msg.timestamp.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' })}
                     </span>
                     {msg.role === 'assistant' && (
-                      <button onClick={() => copyMessage(msg.content)} className="p-1 rounded hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
-                        <Copy className="w-3 h-3 text-[var(--text-tertiary)]" />
-                      </button>
+                      <>
+                        <button onClick={() => copyMessage(msg.content)} title="Copy text" className="p-1 rounded hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+                          <Copy className="w-3 h-3 text-[var(--text-tertiary)]" />
+                        </button>
+                        {msg.isDocument && (
+                          <>
+                            <button onClick={() => downloadMessagePDF(msg)} title="Download as PDF" className="p-1 rounded hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+                              <Download className="w-3 h-3 text-[var(--text-tertiary)]" />
+                            </button>
+                            <button
+                              onClick={() => linkToProcurement(msg.content)}
+                              title="Use in procurement"
+                              className="flex items-center gap-1 px-2 py-0.5 rounded bg-[var(--brand-blue-light)] text-[var(--brand-blue)] hover:bg-blue-100 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 transition-colors text-[10px] font-medium"
+                            >
+                              <ExternalLink className="w-2.5 h-2.5" /> Use in procurement
+                            </button>
+                          </>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>

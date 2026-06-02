@@ -1,12 +1,12 @@
 'use client';
 
-import { Moon, Sun, Bell, Plus, Search } from 'lucide-react';
+import { Moon, Sun, Plus } from 'lucide-react';
 import { useTheme } from './theme-provider';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useRouter } from 'next/navigation';
-import { cn } from '@/lib/utils';
+import { NotificationsDropdown } from './notifications';
 
 interface TopbarProps {
   title: string;
@@ -16,7 +16,7 @@ interface TopbarProps {
 
 export function Topbar({ title, subtitle, actions }: TopbarProps) {
   const { theme, toggleTheme } = useTheme();
-  const { user, can } = useAuth();
+  const { can } = useAuth();
   const router = useRouter();
 
   return (
@@ -32,16 +32,13 @@ export function Topbar({ title, subtitle, actions }: TopbarProps) {
 
       {/* Right — actions */}
       <div className="flex items-center gap-2">
-        {/* Region badge */}
         <Badge variant="outline" className="text-xs gap-1.5 text-[var(--text-secondary)] border-[var(--border-default)]">
           <span className="w-2 h-2 rounded-full bg-green-500 pulse-dot inline-block" />
           ZAR · South Africa
         </Badge>
 
-        {/* Custom actions passed in */}
         {actions}
 
-        {/* New procurement button */}
         {can('create_procurement') && (
           <Button
             size="sm"
@@ -53,11 +50,8 @@ export function Topbar({ title, subtitle, actions }: TopbarProps) {
           </Button>
         )}
 
-        {/* Notifications */}
-        <button className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
-          <Bell className="w-4 h-4 text-[var(--text-secondary)]" />
-          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full" />
-        </button>
+        {/* Notifications dropdown */}
+        <NotificationsDropdown />
 
         {/* Theme toggle */}
         <button
