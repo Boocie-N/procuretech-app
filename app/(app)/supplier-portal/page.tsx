@@ -98,12 +98,12 @@ export default function SupplierDashboardPage() {
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs text-[var(--text-tertiary)]">{k.label}</span>
                 <div className={cn('w-7 h-7 rounded-lg flex items-center justify-center',
-                  k.color === 'blue'   ? 'bg-blue-50'   :
+                  k.color === 'blue'   ? 'bg-emerald-50'   :
                   k.color === 'amber'  ? 'bg-amber-50'  :
                   k.color === 'green'  ? 'bg-green-50'  : 'bg-purple-50'
                 )}>
                   <k.icon className={cn('w-3.5 h-3.5',
-                    k.color === 'blue'   ? 'text-blue-600'   :
+                    k.color === 'blue'   ? 'text-emerald-600'   :
                     k.color === 'amber'  ? 'text-amber-600'  :
                     k.color === 'green'  ? 'text-green-600'  : 'text-purple-600'
                   )} />
@@ -121,14 +121,14 @@ export default function SupplierDashboardPage() {
             const Icon = card.icon;
             return (
               <Link key={card.href} href={card.href}>
-                <div className="flex items-center gap-4 p-4 bg-white dark:bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] shadow-sm hover:border-[var(--border-brand)] hover:bg-[var(--brand-blue-light)] dark:hover:bg-blue-900/10 transition-all cursor-pointer group">
+                <div className="flex items-center gap-4 p-4 bg-white dark:bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] shadow-sm hover:border-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 transition-all cursor-pointer group">
                   <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center shrink-0',
-                    card.color === 'blue'  ? 'bg-blue-100 dark:bg-blue-900/30'   :
+                    card.color === 'blue'  ? 'bg-emerald-100 dark:bg-emerald-900/30'   :
                     card.color === 'green' ? 'bg-green-100 dark:bg-green-900/30' :
                     'bg-amber-100 dark:bg-amber-900/30'
                   )}>
                     <Icon className={cn('w-5 h-5',
-                      card.color === 'blue'  ? 'text-blue-600'  :
+                      card.color === 'blue'  ? 'text-emerald-600'  :
                       card.color === 'green' ? 'text-green-600' :
                       'text-amber-600'
                     )} />
@@ -137,7 +137,7 @@ export default function SupplierDashboardPage() {
                     <div className="text-sm font-semibold text-[var(--text-primary)]">{card.label}</div>
                     <div className="text-xs text-[var(--text-tertiary)] mt-0.5">{card.desc}</div>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-[var(--text-tertiary)] group-hover:text-[var(--brand-blue)] transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-[var(--text-tertiary)] group-hover:text-emerald-600 transition-colors" />
                 </div>
               </Link>
             );
@@ -174,7 +174,7 @@ export default function SupplierDashboardPage() {
                 {rfq.submitted ? (
                   <span className="text-xs text-green-600 flex items-center gap-1 font-medium"><CheckCircle2 className="w-3.5 h-3.5" /> Submitted</span>
                 ) : rfq.status === 'open' ? (
-                  <Button size="sm" className="bg-[var(--brand-blue)] hover:bg-[var(--brand-blue-dark)] text-white text-xs h-8">Submit Bid</Button>
+                  <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs h-8">Submit Bid</Button>
                 ) : (
                   <Button size="sm" variant="outline" className="text-xs h-8 gap-1"><Eye className="w-3 h-3" /> View</Button>
                 )}

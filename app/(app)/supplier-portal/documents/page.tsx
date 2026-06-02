@@ -30,7 +30,7 @@ export default function SupplierDocumentsPage() {
         subtitle="Keep all documents current to remain eligible for RFQ invitations"
         actions={
           <Link href="/supplier-portal/register">
-            <Button size="sm" className="bg-[var(--brand-blue)] text-white text-xs h-8 gap-1.5">
+            <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs h-8 gap-1.5">
               <Upload className="w-3.5 h-3.5" /> Upload Documents
             </Button>
           </Link>

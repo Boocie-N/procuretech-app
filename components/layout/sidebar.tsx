@@ -98,12 +98,12 @@ export function Sidebar() {
         {/* Logo */}
         <div className="px-5 py-4 border-b border-[var(--border-default)] shrink-0">
           <Link href={homeHref} className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[var(--brand-blue)] flex items-center justify-center shrink-0">
+            <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center shrink-0', isSupplier ? 'bg-emerald-600' : 'bg-[var(--brand-blue)]')}>
               <span className="text-white font-bold text-sm">P</span>
             </div>
             <div>
               <div className="font-bold text-[var(--text-primary)] text-sm leading-none">
-                ProcureTech<span className="text-[var(--brand-blue)]">+</span>
+                ProcureTech<span className={isSupplier ? 'text-emerald-600' : 'text-[var(--brand-blue)]'}>+</span>
               </div>
               <div className="text-[10px] text-[var(--text-tertiary)] mt-0.5 uppercase tracking-wider">
                 {isSupplier ? 'Supplier Portal' : 'AI Procurement OS'}
@@ -130,11 +130,16 @@ export function Sidebar() {
                       className={cn(
                         'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-150 group',
                         isActive
-                          ? 'bg-[var(--brand-blue-light)] text-[var(--brand-blue)] font-medium dark:bg-blue-900/20 dark:text-blue-400'
+                          ? isSupplier
+                            ? 'bg-emerald-50 text-emerald-700 font-medium dark:bg-emerald-900/20 dark:text-emerald-400'
+                            : 'bg-[var(--brand-blue-light)] text-[var(--brand-blue)] font-medium dark:bg-blue-900/20 dark:text-blue-400'
                           : 'text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--text-primary)] dark:hover:bg-white/5 dark:hover:text-white'
                       )}
                     >
-                      <Icon className={cn('w-4 h-4 shrink-0', isActive ? 'text-[var(--brand-blue)]' : 'text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)]')} />
+                      <Icon className={cn('w-4 h-4 shrink-0', isActive
+                            ? isSupplier ? 'text-emerald-600' : 'text-[var(--brand-blue)]'
+                            : 'text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)]'
+                          )} />
                       <span className="flex-1 truncate">{item.label}</span>
                       {item.badge && (
                         <span className={cn(
@@ -147,7 +152,7 @@ export function Sidebar() {
                         </span>
                       )}
                       {isActive && (
-                        <ChevronRight className="w-3 h-3 text-[var(--brand-blue)] opacity-60" />
+                        <ChevronRight className={cn('w-3 h-3 opacity-60', isSupplier ? 'text-emerald-600' : 'text-[var(--brand-blue)]')} />
                       )}
                     </Link>
                   );

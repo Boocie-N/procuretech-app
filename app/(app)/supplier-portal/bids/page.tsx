@@ -11,7 +11,7 @@ const MY_BIDS = [
 ];
 
 const statusColor = (s: string) =>
-  s === 'recommended' ? 'bg-blue-50 text-blue-700' :
+  s === 'recommended' ? 'bg-emerald-50 text-emerald-700' :
   s === 'awarded'     ? 'bg-green-50 text-green-700' :
   'bg-gray-100 text-gray-500';
 
@@ -33,7 +33,7 @@ export default function SupplierBidsPage() {
             <tbody className="divide-y divide-[var(--border-default)]">
               {MY_BIDS.map(bid => (
                 <tr key={bid.ref} className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                  <td className="px-5 py-3 text-xs text-[var(--brand-blue)] font-mono">{bid.ref}</td>
+                  <td className="px-5 py-3 text-xs text-emerald-600 font-mono">{bid.ref}</td>
                   <td className="px-5 py-3 text-sm font-medium text-[var(--text-primary)]">{bid.title}</td>
                   <td className="px-5 py-3 text-xs text-[var(--text-secondary)]">{formatDate(bid.submitted)}</td>
                   <td className="px-5 py-3 text-sm font-semibold text-[var(--text-primary)]">{formatCurrency(bid.value, true)}</td>

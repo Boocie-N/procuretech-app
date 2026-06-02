@@ -37,7 +37,7 @@ export default function SupplierRFQsPage() {
                     )}>{rfq.status === 'open' ? 'Open' : 'Closed'}</span>
                   </div>
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--text-tertiary)]">
-                    <span className="font-mono text-[var(--brand-blue)]">{rfq.ref}</span>
+                    <span className="font-mono text-emerald-600">{rfq.ref}</span>
                     <span>·</span><span>{rfq.category}</span>
                     <span>·</span><span>Budget: <strong className="text-[var(--text-primary)]">{formatCurrency(rfq.budget)}</strong></span>
                     <span>·</span><span>Closes: <strong className="text-[var(--text-primary)]">{formatDate(rfq.closing)}</strong></span>
@@ -52,7 +52,7 @@ export default function SupplierRFQsPage() {
                       <CheckCircle2 className="w-3.5 h-3.5" /> Bid Submitted
                     </span>
                   ) : rfq.status === 'open' ? (
-                    <Button size="sm" className="bg-[var(--brand-blue)] hover:bg-[var(--brand-blue-dark)] text-white text-xs h-8">
+                    <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs h-8">
                       Submit Bid
                     </Button>
                   ) : (
