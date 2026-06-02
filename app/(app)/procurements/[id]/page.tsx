@@ -331,24 +331,32 @@ export default function ProcurementDetailPage({ params }: { params: Promise<{ id
             </div>
 
             {/* Document Actions */}
-            <div className="bg-white border border-[var(--border-default)] rounded-xl shadow-sm p-4">
-              <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-3">Document Actions</h2>
-              <div className="space-y-2">
-                <Link href="/copilot">
-                  <Button variant="outline" size="sm" className="w-full justify-start gap-2 h-9 text-xs">
-                    <Bot className="w-4 h-4 text-[var(--brand-blue)]" />
-                    Generate RFQ with AI
-                  </Button>
+            <div className="bg-white border border-[var(--border-default)] rounded-xl shadow-sm p-5">
+              <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Document Actions</h2>
+              <div className="space-y-2.5">
+
+                <Link href="/copilot" className="flex items-center gap-3 p-3 rounded-lg border border-[var(--border-default)] hover:bg-blue-50 hover:border-blue-200 dark:hover:bg-blue-900/20 transition-colors group">
+                  <div className="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center shrink-0">
+                    <Bot className="w-4.5 h-4.5 text-[var(--brand-blue)]" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--brand-blue)] transition-colors">Generate RFQ with AI</p>
+                    <p className="text-[11px] text-[var(--text-tertiary)]">Open AI Copilot</p>
+                  </div>
                 </Link>
-                <Link href="/audit-trail">
-                  <Button variant="outline" size="sm" className="w-full justify-start gap-2 h-9 text-xs">
+
+                <Link href="/audit-trail" className="flex items-center gap-3 p-3 rounded-lg border border-[var(--border-default)] hover:bg-purple-50 hover:border-purple-200 dark:hover:bg-purple-900/20 transition-colors group">
+                  <div className="w-9 h-9 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center shrink-0">
                     <Shield className="w-4 h-4 text-purple-600" />
-                    View Audit Trail
-                  </Button>
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-[var(--text-primary)] group-hover:text-purple-600 transition-colors">View Audit Trail</p>
+                    <p className="text-[11px] text-[var(--text-tertiary)]">Blockchain-verified log</p>
+                  </div>
                 </Link>
-                <Button
-                  variant="outline" size="sm"
-                  className="w-full justify-start gap-2 h-9 text-xs"
+
+                <button
+                  className="w-full flex items-center gap-3 p-3 rounded-lg border border-[var(--border-default)] hover:bg-gray-50 hover:border-gray-300 dark:hover:bg-white/5 transition-colors group text-left"
                   onClick={async () => {
                     if (bids.length > 0) {
                       await generateEvaluationPDF(procurement, bids);
@@ -358,9 +366,15 @@ export default function ProcurementDetailPage({ params }: { params: Promise<{ id
                     }
                   }}
                 >
-                  <FileText className="w-4 h-4 text-gray-500" />
-                  Download Evaluation PDF
-                </Button>
+                  <div className="w-9 h-9 rounded-lg bg-gray-100 dark:bg-white/10 flex items-center justify-center shrink-0">
+                    <FileText className="w-4 h-4 text-gray-500" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-[var(--text-primary)]">Download Evaluation PDF</p>
+                    <p className="text-[11px] text-[var(--text-tertiary)]">Bid scoring report</p>
+                  </div>
+                </button>
+
               </div>
             </div>
 
