@@ -6,7 +6,7 @@
 -- ── Organisation ──────────────────────────────────────────
 insert into organisations (id, name, reg_number, vat_number, address, province, currency, region)
 values (
-  'a0000000-0000-0000-0000-000000000001',
+  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
   'ProcureTech+ Demo Org',
   '2020/123456/07',
   '4890123456',
@@ -17,19 +17,9 @@ values (
 ) on conflict (id) do nothing;
 
 -- ── Users ─────────────────────────────────────────────────
--- NOTE: These are profile records only.
--- Real auth users are created via Supabase Auth (Settings > Authentication).
--- Insert these with placeholder UUIDs matching your auth users,
--- or use the demo IDs below for local/demo purposes.
-
-insert into users (id, email, full_name, role, organisation_id, created_at) values
-  ('u1000000-0000-0000-0000-000000000001', 'thabo@procuretech.co.za',  'Thabo Mokoena',  'procurement_officer', 'a0000000-0000-0000-0000-000000000001', '2025-03-10T08:00:00Z'),
-  ('u1000000-0000-0000-0000-000000000002', 'naledi@procuretech.co.za', 'Naledi Dlamini', 'manager',             'a0000000-0000-0000-0000-000000000001', '2025-02-14T08:00:00Z'),
-  ('u1000000-0000-0000-0000-000000000003', 'sipho@procuretech.co.za',  'Sipho Khumalo',  'cfo',                 'a0000000-0000-0000-0000-000000000001', '2025-01-20T08:00:00Z'),
-  ('u1000000-0000-0000-0000-000000000004', 'admin@procuretech.co.za',  'Admin User',     'admin',               'a0000000-0000-0000-0000-000000000001', '2025-01-05T08:00:00Z'),
-  ('u1000000-0000-0000-0000-000000000005', 'legal@procuretech.co.za',  'Zanele Motha',   'legal',               'a0000000-0000-0000-0000-000000000001', '2025-04-01T08:00:00Z'),
-  ('u1000000-0000-0000-0000-000000000006', 'supplier@mecer.co.za',     'Johan van Wyk',  'supplier',            'a0000000-0000-0000-0000-000000000001', '2026-01-08T08:00:00Z')
-on conflict (id) do nothing;
+-- Skipped here — users must be created via Supabase Auth first.
+-- After creating auth users, update their profiles in the users table
+-- with the correct UUIDs from auth.users.
 
 -- ── Suppliers ─────────────────────────────────────────────
 insert into suppliers (
@@ -42,8 +32,8 @@ insert into suppliers (
   created_at, updated_at
 ) values
 (
-  's1000000-0000-0000-0000-000000000001',
-  'a0000000-0000-0000-0000-000000000001',
+  'b1000000-9c0b-4ef8-bb6d-6bb9bd380001',
+  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
   'Mecer IT Solutions (Pty) Ltd', 'Mecer IT',
   '2015/234567/07', '4870234567',
   'Johan van Wyk', 'johan@mecer.co.za', '011 234 5678',
@@ -58,8 +48,8 @@ insert into suppliers (
   '2024-06-01T08:00:00Z', '2025-01-01T08:00:00Z'
 ),
 (
-  's1000000-0000-0000-0000-000000000002',
-  'a0000000-0000-0000-0000-000000000001',
+  'b1000000-9c0b-4ef8-bb6d-6bb9bd380002',
+  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
   'TechPro Distributors (Pty) Ltd', null,
   '2018/456789/07', '4780456789',
   'Sarah Botha', 'sarah@techpro.co.za', '021 987 6543',
@@ -74,8 +64,8 @@ insert into suppliers (
   '2024-07-01T08:00:00Z', '2025-01-01T08:00:00Z'
 ),
 (
-  's1000000-0000-0000-0000-000000000003',
-  'a0000000-0000-0000-0000-000000000001',
+  'b1000000-9c0b-4ef8-bb6d-6bb9bd380003',
+  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
   'AfriTech Supply Co (Pty) Ltd', null,
   '2012/123456/07', '4560123456',
   'Mpho Sithole', 'mpho@afritech.co.za', '012 345 6789',
@@ -90,8 +80,8 @@ insert into suppliers (
   '2024-05-01T08:00:00Z', '2025-01-01T08:00:00Z'
 ),
 (
-  's1000000-0000-0000-0000-000000000004',
-  'a0000000-0000-0000-0000-000000000001',
+  'b1000000-9c0b-4ef8-bb6d-6bb9bd380004',
+  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
   'BuildRight Materials (Pty) Ltd', null,
   '2010/789012/07', '4120789012',
   'Dumisani Nzama', 'dumisani@buildright.co.za', '031 456 7890',
@@ -106,8 +96,8 @@ insert into suppliers (
   '2024-04-01T08:00:00Z', '2025-01-01T08:00:00Z'
 ),
 (
-  's1000000-0000-0000-0000-000000000005',
-  'a0000000-0000-0000-0000-000000000001',
+  'b1000000-9c0b-4ef8-bb6d-6bb9bd380005',
+  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
   'Ndalo Security Services (Pty) Ltd', null,
   '2016/345678/07', '4890345678',
   'Ndalo Mthembu', 'ndalo@ndalosecurity.co.za', '011 567 8901',
@@ -122,8 +112,8 @@ insert into suppliers (
   '2024-08-01T08:00:00Z', '2025-01-01T08:00:00Z'
 ),
 (
-  's1000000-0000-0000-0000-000000000006',
-  'a0000000-0000-0000-0000-000000000001',
+  'b1000000-9c0b-4ef8-bb6d-6bb9bd380006',
+  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
   'GlobalTech SA (Pty) Ltd', null,
   '2020/901234/07', null,
   'Greg Smith', 'greg@globaltech.co.za', '011 678 9012',
@@ -140,74 +130,65 @@ insert into suppliers (
 on conflict (id) do nothing;
 
 -- ── Procurements ──────────────────────────────────────────
+-- created_by and assigned_to left null until real auth users exist
 insert into procurements (
   id, organisation_id, reference, title, description, category, type,
   status, current_stage, budget, estimated_value, currency,
   delivery_location, delivery_province, required_by, bbbee_requirement,
-  min_quotes, created_by, assigned_to, approval_chain, created_at, updated_at
+  min_quotes, approval_chain, created_at, updated_at
 ) values
 (
-  'p1000000-0000-0000-0000-000000000001',
-  'a0000000-0000-0000-0000-000000000001',
+  'c1000000-9c0b-4ef8-bb6d-6bb9bd380001',
+  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
   'RFQ/PT/2025/048', '500× Laptop Computers',
   'Procurement of 500 Dell Latitude or equivalent laptops, Core i7, 16GB RAM, 512GB SSD, Windows 11 Pro for Johannesburg offices.',
   'it_equipment', 'rfq', 'evaluation', 'assess',
   1200000, 1150000, 'ZAR',
   'Johannesburg CBD', 'GP', '2025-03-15', 'level_1_4', 3,
-  'u1000000-0000-0000-0000-000000000001',
-  'u1000000-0000-0000-0000-000000000001',
-  '[{"step":1,"role":"procurement_officer","role_label":"Procurement Officer","status":"approved","approved_by":"u1000000-0000-0000-0000-000000000001","approved_by_name":"Thabo Mokoena","actioned_at":"2025-01-20T10:00:00Z"},{"step":2,"role":"manager","role_label":"Procurement Manager","status":"pending"},{"step":3,"role":"cfo","role_label":"CFO","status":"pending"},{"step":4,"role":"legal","role_label":"Legal","status":"pending"}]',
+  '[{"step":1,"role":"procurement_officer","role_label":"Procurement Officer","status":"approved","approved_by_name":"Thabo Mokoena","actioned_at":"2025-01-20T10:00:00Z"},{"step":2,"role":"manager","role_label":"Procurement Manager","status":"pending"},{"step":3,"role":"cfo","role_label":"CFO","status":"pending"},{"step":4,"role":"legal","role_label":"Legal","status":"pending"}]',
   '2025-01-15T09:00:00Z', '2025-01-22T14:30:00Z'
 ),
 (
-  'p1000000-0000-0000-0000-000000000002',
-  'a0000000-0000-0000-0000-000000000001',
+  'c1000000-9c0b-4ef8-bb6d-6bb9bd380002',
+  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
   'RFQ/PT/2025/047', 'Office Furniture — Sandton HQ',
   'Supply and delivery of ergonomic office furniture for 80 workstations at Sandton headquarters.',
   'office_supplies', 'rfq', 'awarded', 'contract',
   340000, 315000, 'ZAR',
   'Sandton, Johannesburg', 'GP', '2025-02-28', 'level_1_4', 3,
-  'u1000000-0000-0000-0000-000000000001',
-  'u1000000-0000-0000-0000-000000000001',
-  '[{"step":1,"role":"procurement_officer","role_label":"Procurement Officer","status":"approved","approved_by":"u1000000-0000-0000-0000-000000000001","approved_by_name":"Thabo Mokoena","actioned_at":"2025-01-10T10:00:00Z"},{"step":2,"role":"manager","role_label":"Procurement Manager","status":"approved","approved_by":"u1000000-0000-0000-0000-000000000002","approved_by_name":"Naledi Dlamini","actioned_at":"2025-01-12T11:00:00Z"},{"step":3,"role":"cfo","role_label":"CFO","status":"approved","approved_by":"u1000000-0000-0000-0000-000000000003","approved_by_name":"Sipho Khumalo","actioned_at":"2025-01-13T09:00:00Z"},{"step":4,"role":"legal","role_label":"Legal","status":"approved","approved_by":"u1000000-0000-0000-0000-000000000005","approved_by_name":"Zanele Motha","actioned_at":"2025-01-14T14:00:00Z"}]',
+  '[{"step":1,"role":"procurement_officer","role_label":"Procurement Officer","status":"approved","approved_by_name":"Thabo Mokoena","actioned_at":"2025-01-10T10:00:00Z"},{"step":2,"role":"manager","role_label":"Procurement Manager","status":"approved","approved_by_name":"Naledi Dlamini","actioned_at":"2025-01-12T11:00:00Z"},{"step":3,"role":"cfo","role_label":"CFO","status":"approved","approved_by_name":"Sipho Khumalo","actioned_at":"2025-01-13T09:00:00Z"},{"step":4,"role":"legal","role_label":"Legal","status":"approved","approved_by_name":"Zanele Motha","actioned_at":"2025-01-14T14:00:00Z"}]',
   '2025-01-05T09:00:00Z', '2025-01-14T15:00:00Z'
 ),
 (
-  'p1000000-0000-0000-0000-000000000003',
-  'a0000000-0000-0000-0000-000000000001',
+  'c1000000-9c0b-4ef8-bb6d-6bb9bd380003',
+  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
   'TDR/PT/2025/049', 'Construction — Concrete Supply (200 tons)',
   'Supply and delivery of 200 tons of 32MPa ready-mix concrete for the Durban warehouse expansion project.',
   'construction', 'rfq', 'rfq_sent', 'source',
   890000, null, 'ZAR',
   'Durban, KwaZulu-Natal', 'KZN', '2025-04-01', 'level_1_6', 3,
-  'u1000000-0000-0000-0000-000000000001',
-  'u1000000-0000-0000-0000-000000000001',
-  '[{"step":1,"role":"procurement_officer","role_label":"Procurement Officer","status":"approved","approved_by":"u1000000-0000-0000-0000-000000000001","approved_by_name":"Thabo Mokoena","actioned_at":"2025-01-18T10:00:00Z"},{"step":2,"role":"manager","role_label":"Procurement Manager","status":"pending"},{"step":3,"role":"cfo","role_label":"CFO","status":"pending"},{"step":4,"role":"legal","role_label":"Legal","status":"pending"}]',
+  '[{"step":1,"role":"procurement_officer","role_label":"Procurement Officer","status":"approved","approved_by_name":"Thabo Mokoena","actioned_at":"2025-01-18T10:00:00Z"},{"step":2,"role":"manager","role_label":"Procurement Manager","status":"pending"},{"step":3,"role":"cfo","role_label":"CFO","status":"pending"},{"step":4,"role":"legal","role_label":"Legal","status":"pending"}]',
   '2025-01-16T09:00:00Z', '2025-01-20T11:00:00Z'
 ),
 (
-  'p1000000-0000-0000-0000-000000000004',
-  'a0000000-0000-0000-0000-000000000001',
+  'c1000000-9c0b-4ef8-bb6d-6bb9bd380004',
+  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
   'RFQ/PT/2025/046', 'Security Services — 24/7 Sandton Complex',
   'Provision of 3 armed security officers for 24/7 coverage at Sandton office complex. PSIRA-registered guards, Grade C minimum.',
   'security', 'rfq', 'awarded', 'deliver_review',
   560000, 540000, 'ZAR',
   'Sandton, Johannesburg', 'GP', '2025-02-01', 'level_1_4', 3,
-  'u1000000-0000-0000-0000-000000000001',
-  'u1000000-0000-0000-0000-000000000001',
-  '[{"step":1,"role":"procurement_officer","role_label":"Procurement Officer","status":"approved","approved_by":"u1000000-0000-0000-0000-000000000001","approved_by_name":"Thabo Mokoena","actioned_at":"2024-12-20T10:00:00Z"},{"step":2,"role":"manager","role_label":"Procurement Manager","status":"approved","approved_by":"u1000000-0000-0000-0000-000000000002","approved_by_name":"Naledi Dlamini","actioned_at":"2024-12-22T11:00:00Z"},{"step":3,"role":"cfo","role_label":"CFO","status":"approved","approved_by":"u1000000-0000-0000-0000-000000000003","approved_by_name":"Sipho Khumalo","actioned_at":"2024-12-23T09:00:00Z"},{"step":4,"role":"legal","role_label":"Legal","status":"approved","approved_by":"u1000000-0000-0000-0000-000000000005","approved_by_name":"Zanele Motha","actioned_at":"2024-12-24T14:00:00Z"}]',
+  '[{"step":1,"role":"procurement_officer","role_label":"Procurement Officer","status":"approved","approved_by_name":"Thabo Mokoena","actioned_at":"2024-12-20T10:00:00Z"},{"step":2,"role":"manager","role_label":"Procurement Manager","status":"approved","approved_by_name":"Naledi Dlamini","actioned_at":"2024-12-22T11:00:00Z"},{"step":3,"role":"cfo","role_label":"CFO","status":"approved","approved_by_name":"Sipho Khumalo","actioned_at":"2024-12-23T09:00:00Z"},{"step":4,"role":"legal","role_label":"Legal","status":"approved","approved_by_name":"Zanele Motha","actioned_at":"2024-12-24T14:00:00Z"}]',
   '2024-12-15T09:00:00Z', '2025-01-01T08:00:00Z'
 ),
 (
-  'p1000000-0000-0000-0000-000000000005',
-  'a0000000-0000-0000-0000-000000000001',
+  'c1000000-9c0b-4ef8-bb6d-6bb9bd380005',
+  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
   'RFQ/PT/2025/050', 'PPE Supplies — Health & Safety',
   'Emergency procurement of PPE: 500 hard hats, 1000 safety vests, 2000 pairs safety gloves.',
   'healthcare', 'rfq', 'needs_identified', 'identify_need',
   120000, null, 'ZAR',
   'Cape Town', 'WC', '2025-02-15', 'level_1_6', 3,
-  'u1000000-0000-0000-0000-000000000001',
-  'u1000000-0000-0000-0000-000000000001',
   '[{"step":1,"role":"procurement_officer","role_label":"Procurement Officer","status":"pending"},{"step":2,"role":"manager","role_label":"Procurement Manager","status":"pending"},{"step":3,"role":"cfo","role_label":"CFO","status":"pending"},{"step":4,"role":"legal","role_label":"Legal","status":"pending"}]',
   '2025-01-22T09:00:00Z', '2025-01-22T09:00:00Z'
 )
@@ -220,9 +201,9 @@ insert into bids (
   technical_compliance, notes, submitted_at, ai_score, recommendation
 ) values
 (
-  'b1000000-0000-0000-0000-000000000001',
-  'p1000000-0000-0000-0000-000000000001',
-  's1000000-0000-0000-0000-000000000001',
+  'd1000000-9c0b-4ef8-bb6d-6bb9bd380001',
+  'c1000000-9c0b-4ef8-bb6d-6bb9bd380001',
+  'b1000000-9c0b-4ef8-bb6d-6bb9bd380001',
   'Mecer IT Solutions',
   2280, 1140000, 14, 36, 98,
   'Dell Latitude 5540, Core i7-1365U, 16GB DDR4, 512GB NVMe. All units ICASA certified. 3-year on-site warranty included.',
@@ -231,9 +212,9 @@ insert into bids (
   'recommended'
 ),
 (
-  'b1000000-0000-0000-0000-000000000002',
-  'p1000000-0000-0000-0000-000000000001',
-  's1000000-0000-0000-0000-000000000003',
+  'd1000000-9c0b-4ef8-bb6d-6bb9bd380002',
+  'c1000000-9c0b-4ef8-bb6d-6bb9bd380001',
+  'b1000000-9c0b-4ef8-bb6d-6bb9bd380003',
   'AfriTech Supply Co',
   2350, 1175000, 21, 24, 91,
   'Lenovo ThinkPad E15, Core i7-1255U, 16GB, 512GB SSD. Good BBBEE Level 2. 2-year warranty.',
@@ -242,9 +223,9 @@ insert into bids (
   'second'
 ),
 (
-  'b1000000-0000-0000-0000-000000000003',
-  'p1000000-0000-0000-0000-000000000001',
-  's1000000-0000-0000-0000-000000000006',
+  'd1000000-9c0b-4ef8-bb6d-6bb9bd380003',
+  'c1000000-9c0b-4ef8-bb6d-6bb9bd380001',
+  'b1000000-9c0b-4ef8-bb6d-6bb9bd380006',
   'GlobalTech SA',
   2150, 1075000, 35, 12, 72,
   'Generic brand laptops, Core i7 equivalent. VAT registration unverified.',
@@ -253,9 +234,9 @@ insert into bids (
   'not_recommended'
 ),
 (
-  'b1000000-0000-0000-0000-000000000004',
-  'p1000000-0000-0000-0000-000000000002',
-  's1000000-0000-0000-0000-000000000004',
+  'd1000000-9c0b-4ef8-bb6d-6bb9bd380004',
+  'c1000000-9c0b-4ef8-bb6d-6bb9bd380002',
+  'b1000000-9c0b-4ef8-bb6d-6bb9bd380004',
   'BuildRight Materials',
   null, 315000, 10, null, 95,
   'Steelcase Series 1 chairs and Haworth desks. Full installation included. BBBEE Level 1.',
@@ -264,9 +245,9 @@ insert into bids (
   'recommended'
 ),
 (
-  'b1000000-0000-0000-0000-000000000005',
-  'p1000000-0000-0000-0000-000000000004',
-  's1000000-0000-0000-0000-000000000005',
+  'd1000000-9c0b-4ef8-bb6d-6bb9bd380005',
+  'c1000000-9c0b-4ef8-bb6d-6bb9bd380004',
+  'b1000000-9c0b-4ef8-bb6d-6bb9bd380005',
   'Ndalo Security Services',
   null, 540000, 7, null, 100,
   'PSIRA-registered Grade C guards. Armed response on call. 24/7 coverage. Public liability R10M.',
