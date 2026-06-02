@@ -270,6 +270,39 @@ export default function DashboardPage() {
           ))}
         </div>
 
+        {/* Quick Actions */}
+        <div className="bg-white dark:bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] shadow-sm p-5">
+          <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Quick Actions</h3>
+          <div className="grid grid-cols-4 gap-3">
+            {quickActions.map(action => (
+              <Link key={action.href} href={action.href}>
+                <div className="flex items-center gap-3 p-3 rounded-lg border border-[var(--border-default)] hover:border-[var(--border-brand)] hover:bg-[var(--brand-blue-light)] dark:hover:bg-blue-900/10 transition-all cursor-pointer group">
+                  <div className={cn(
+                    'w-8 h-8 rounded-lg flex items-center justify-center shrink-0',
+                    action.color === 'blue'   ? 'bg-blue-100 dark:bg-blue-900/30' :
+                    action.color === 'indigo' ? 'bg-indigo-100 dark:bg-indigo-900/30' :
+                    action.color === 'green'  ? 'bg-green-100 dark:bg-green-900/30' :
+                    action.color === 'amber'  ? 'bg-amber-100 dark:bg-amber-900/30' :
+                    'bg-purple-100 dark:bg-purple-900/30'
+                  )}>
+                    <action.icon className={cn('w-4 h-4',
+                      action.color === 'blue'   ? 'text-blue-600' :
+                      action.color === 'indigo' ? 'text-indigo-600' :
+                      action.color === 'green'  ? 'text-green-600' :
+                      action.color === 'amber'  ? 'text-amber-600' :
+                      'text-purple-600'
+                    )} />
+                  </div>
+                  <div>
+                    <div className="text-sm font-medium text-[var(--text-primary)]">{action.label}</div>
+                    <div className="text-[11px] text-[var(--text-tertiary)]">{action.desc}</div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
         {/* Main content grid */}
         <div className="grid grid-cols-3 gap-4">
 
@@ -337,39 +370,6 @@ export default function DashboardPage() {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="bg-white dark:bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] shadow-sm p-5">
-          <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-4 gap-3">
-            {quickActions.map(action => (
-              <Link key={action.href} href={action.href}>
-                <div className="flex items-center gap-3 p-3 rounded-lg border border-[var(--border-default)] hover:border-[var(--border-brand)] hover:bg-[var(--brand-blue-light)] dark:hover:bg-blue-900/10 transition-all cursor-pointer group">
-                  <div className={cn(
-                    'w-8 h-8 rounded-lg flex items-center justify-center shrink-0',
-                    action.color === 'blue'   ? 'bg-blue-100 dark:bg-blue-900/30' :
-                    action.color === 'indigo' ? 'bg-indigo-100 dark:bg-indigo-900/30' :
-                    action.color === 'green'  ? 'bg-green-100 dark:bg-green-900/30' :
-                    action.color === 'amber'  ? 'bg-amber-100 dark:bg-amber-900/30' :
-                    'bg-purple-100 dark:bg-purple-900/30'
-                  )}>
-                    <action.icon className={cn('w-4 h-4',
-                      action.color === 'blue'   ? 'text-blue-600' :
-                      action.color === 'indigo' ? 'text-indigo-600' :
-                      action.color === 'green'  ? 'text-green-600' :
-                      action.color === 'amber'  ? 'text-amber-600' :
-                      'text-purple-600'
-                    )} />
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium text-[var(--text-primary)]">{action.label}</div>
-                    <div className="text-[11px] text-[var(--text-tertiary)]">{action.desc}</div>
-                  </div>
-                </div>
-              </Link>
-            ))}
           </div>
         </div>
 

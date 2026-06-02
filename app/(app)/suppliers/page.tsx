@@ -169,7 +169,7 @@ export default function SuppliersPage() {
         subtitle={`${DEMO_SUPPLIERS.length} registered suppliers`}
         actions={
           <Link href="/supplier-portal/register">
-            <Button size="sm" className="bg-[var(--brand-blue)] hover:bg-blue-700 text-white gap-1.5 h-8 text-xs">
+            <Button size="sm" variant="outline" className="gap-1.5 h-8 text-xs">
               <Plus className="w-3.5 h-3.5" />
               Register New Supplier
             </Button>

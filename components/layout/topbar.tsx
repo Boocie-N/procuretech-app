@@ -1,11 +1,9 @@
 'use client';
 
-import { Moon, Sun, Plus } from 'lucide-react';
+import { Moon, Sun } from 'lucide-react';
 import { useTheme } from './theme-provider';
-import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useRouter } from 'next/navigation';
 import { NotificationsDropdown } from './notifications';
 
 interface TopbarProps {
@@ -16,8 +14,6 @@ interface TopbarProps {
 
 export function Topbar({ title, subtitle, actions }: TopbarProps) {
   const { theme, toggleTheme } = useTheme();
-  const { can } = useAuth();
-  const router = useRouter();
 
   return (
     <header className="flex items-center justify-between px-6 py-3.5 bg-white dark:bg-[var(--bg-surface)] border-b border-[var(--border-default)] shrink-0 h-[60px]">
@@ -38,17 +34,6 @@ export function Topbar({ title, subtitle, actions }: TopbarProps) {
         </Badge>
 
         {actions}
-
-        {can('create_procurement') && (
-          <Button
-            size="sm"
-            onClick={() => router.push('/procurements/new')}
-            className="bg-[var(--brand-blue)] hover:bg-[var(--brand-blue-dark)] text-white gap-1.5 h-8 text-xs"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            New Procurement
-          </Button>
-        )}
 
         {/* Notifications dropdown */}
         <NotificationsDropdown />
