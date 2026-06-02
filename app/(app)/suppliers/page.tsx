@@ -263,7 +263,7 @@ export default function SuppliersPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[var(--border-default)]">
-                  {['Company', 'BBBEE', 'Status', 'Grade', 'Province', 'Categories', 'Response %', 'Quality', 'Orders'].map((h) => (
+                  {['Company', 'BBBEE', 'Status', 'Grade', 'Province', 'Categories', 'Response %', 'Quality', 'Orders', ''].map((h) => (
                     <th key={h} className="text-left px-4 py-3 text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wide whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
@@ -309,6 +309,11 @@ export default function SuppliersPage() {
                       </div>
                     </td>
                     <td className="px-4 py-3 text-[var(--text-primary)] font-medium">{s.total_orders}</td>
+                    <td className="px-4 py-3">
+                      <Link href={`/suppliers/${s.id}`}>
+                        <Button size="sm" variant="outline" className="h-7 text-xs">View</Button>
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>
