@@ -94,10 +94,8 @@ export default function CompliancePage() {
         actions={
           <div className="flex gap-2">
             <Dialog open={coiOpen} onOpenChange={setCoiOpen}>
-              <DialogTrigger>
-                <Button variant="outline" size="sm" className="text-xs h-8 gap-1.5">
-                  <Plus className="w-3.5 h-3.5" /> Declare COI
-                </Button>
+              <DialogTrigger render={<Button variant="outline" size="sm" className="text-xs h-8 gap-1.5" />}>
+                <Plus className="w-3.5 h-3.5" /> Declare COI
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader><DialogTitle>Declare Conflict of Interest</DialogTitle></DialogHeader>
@@ -115,10 +113,8 @@ export default function CompliancePage() {
               </DialogContent>
             </Dialog>
             <Dialog open={deviationOpen} onOpenChange={setDeviationOpen}>
-              <DialogTrigger>
-                <Button size="sm" className="bg-[var(--brand-blue)] text-white text-xs h-8 gap-1.5">
-                  <Plus className="w-3.5 h-3.5" /> Log Deviation
-                </Button>
+              <DialogTrigger render={<Button size="sm" className="bg-[var(--brand-blue)] text-white text-xs h-8 gap-1.5" />}>
+                <Plus className="w-3.5 h-3.5" /> Log Deviation
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader><DialogTitle>Log Procurement Deviation</DialogTitle></DialogHeader>
