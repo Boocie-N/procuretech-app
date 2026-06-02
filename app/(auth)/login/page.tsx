@@ -27,7 +27,7 @@ const ROLE_META: Record<UserRole, {
 }> = {
   admin: {
     icon: Settings,
-    color: 'border-violet-200 bg-violet-50 hover:bg-violet-100 dark:border-violet-800 dark:bg-violet-900/20 dark:hover:bg-violet-900/30',
+    color: 'border-gray-200 bg-gray-50 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800/60 dark:hover:bg-gray-800',
     avatarBg: 'bg-violet-600',
     avatarText: 'text-white',
     badge: 'bg-violet-100 text-violet-700',
@@ -35,7 +35,7 @@ const ROLE_META: Record<UserRole, {
   },
   procurement_officer: {
     icon: LayoutDashboard,
-    color: 'border-blue-200 bg-blue-50 hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-900/20 dark:hover:bg-blue-900/30',
+    color: 'border-gray-200 bg-gray-50 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800/60 dark:hover:bg-gray-800',
     avatarBg: 'bg-[#1A56DB]',
     avatarText: 'text-white',
     badge: 'bg-blue-100 text-blue-700',
@@ -43,7 +43,7 @@ const ROLE_META: Record<UserRole, {
   },
   manager: {
     icon: Users,
-    color: 'border-indigo-200 bg-indigo-50 hover:bg-indigo-100 dark:border-indigo-800 dark:bg-indigo-900/20 dark:hover:bg-indigo-900/30',
+    color: 'border-gray-200 bg-gray-50 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800/60 dark:hover:bg-gray-800',
     avatarBg: 'bg-indigo-600',
     avatarText: 'text-white',
     badge: 'bg-indigo-100 text-indigo-700',
@@ -51,7 +51,7 @@ const ROLE_META: Record<UserRole, {
   },
   cfo: {
     icon: Banknote,
-    color: 'border-emerald-200 bg-emerald-50 hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-900/20 dark:hover:bg-emerald-900/30',
+    color: 'border-gray-200 bg-gray-50 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800/60 dark:hover:bg-gray-800',
     avatarBg: 'bg-emerald-600',
     avatarText: 'text-white',
     badge: 'bg-emerald-100 text-emerald-700',
@@ -59,7 +59,7 @@ const ROLE_META: Record<UserRole, {
   },
   legal: {
     icon: Scale,
-    color: 'border-amber-200 bg-amber-50 hover:bg-amber-100 dark:border-amber-800 dark:bg-amber-900/20 dark:hover:bg-amber-900/30',
+    color: 'border-gray-200 bg-gray-50 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800/60 dark:hover:bg-gray-800',
     avatarBg: 'bg-amber-500',
     avatarText: 'text-white',
     badge: 'bg-amber-100 text-amber-700',
@@ -67,7 +67,7 @@ const ROLE_META: Record<UserRole, {
   },
   supplier: {
     icon: Building2,
-    color: 'border-teal-200 bg-teal-50 hover:bg-teal-100 dark:border-teal-800 dark:bg-teal-900/20 dark:hover:bg-teal-900/30',
+    color: 'border-gray-200 bg-gray-50 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800/60 dark:hover:bg-gray-800',
     avatarBg: 'bg-teal-600',
     avatarText: 'text-white',
     badge: 'bg-teal-100 text-teal-700',
