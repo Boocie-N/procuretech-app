@@ -3,9 +3,10 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  LayoutDashboard, Bot, FileText, Scale, Users, BarChart3,
+  LayoutDashboard, Bot, FileText, BarChart3,
   Link2, BookOpen, Settings, ShieldCheck, ChevronRight,
-  LogOut, Building2, ListChecks, CheckSquare,
+  LogOut, Building2, ListChecks, CheckSquare, Inbox, History,
+  FolderOpen, UserCircle, AlertTriangle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/lib/auth-context';
@@ -17,43 +18,65 @@ interface NavItem {
   icon: React.ElementType;
   badge?: string;
   badgeColor?: string;
-  permission?: string;
 }
 
-const NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
+const INTERNAL_NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
   {
     label: 'Overview',
     items: [
-      { href: '/dashboard',    label: 'Dashboard',    icon: LayoutDashboard },
-      { href: '/analytics',    label: 'Analytics',    icon: BarChart3 },
+      { href: '/dashboard',    label: 'Dashboard',       icon: LayoutDashboard },
+      { href: '/analytics',    label: 'Analytics',       icon: BarChart3 },
     ],
   },
   {
     label: 'Procurement',
     items: [
       { href: '/procurements', label: 'My Procurements', icon: ListChecks, badge: '5' },
-      { href: '/copilot',      label: 'AI Copilot',      icon: Bot,         badge: 'AI', badgeColor: 'blue' },
-      { href: '/approvals',    label: 'Approvals',        icon: CheckSquare, badge: '2', badgeColor: 'amber' },
+      { href: '/copilot',      label: 'AI Copilot',      icon: Bot,        badge: 'AI', badgeColor: 'blue' },
+      { href: '/approvals',    label: 'Approvals',       icon: CheckSquare, badge: '2', badgeColor: 'amber' },
     ],
   },
   {
     label: 'Network',
     items: [
-      { href: '/suppliers',    label: 'Suppliers',         icon: Building2 },
-      { href: '/contracts',    label: 'Contracts',         icon: FileText },
+      { href: '/suppliers',    label: 'Suppliers',       icon: Building2 },
+      { href: '/contracts',    label: 'Contracts',       icon: FileText },
     ],
   },
   {
     label: 'Governance',
     items: [
-      { href: '/audit-trail',  label: 'Audit Trail',       icon: Link2 },
-      { href: '/compliance',   label: 'Compliance',        icon: ShieldCheck },
+      { href: '/audit-trail',  label: 'Audit Trail',     icon: Link2 },
+      { href: '/compliance',   label: 'Compliance',      icon: ShieldCheck },
     ],
   },
   {
     label: 'Knowledge',
     items: [
-      { href: '/knowledge',    label: 'Knowledge Base',    icon: BookOpen },
+      { href: '/knowledge',    label: 'Knowledge Base',  icon: BookOpen },
+    ],
+  },
+];
+
+const SUPPLIER_NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
+  {
+    label: 'Overview',
+    items: [
+      { href: '/supplier-portal',           label: 'Dashboard',   icon: LayoutDashboard },
+    ],
+  },
+  {
+    label: 'Bidding',
+    items: [
+      { href: '/supplier-portal/rfqs',      label: 'Open RFQs',   icon: Inbox,      badge: '2', badgeColor: 'blue' },
+      { href: '/supplier-portal/bids',      label: 'My Bids',     icon: History },
+    ],
+  },
+  {
+    label: 'Compliance',
+    items: [
+      { href: '/supplier-portal/documents', label: 'Documents',   icon: FolderOpen, badge: '2', badgeColor: 'amber' },
+      { href: '/supplier-portal/register',  label: 'My Profile',  icon: UserCircle },
     ],
   },
 ];
@@ -61,6 +84,10 @@ const NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
 export function Sidebar() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+
+  const isSupplier = user?.role === 'supplier';
+  const sections = isSupplier ? SUPPLIER_NAV_SECTIONS : INTERNAL_NAV_SECTIONS;
+  const homeHref = isSupplier ? '/supplier-portal' : '/dashboard';
 
   const initials = user?.full_name
     .split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() ?? 'U';
@@ -70,7 +97,7 @@ export function Sidebar() {
 
         {/* Logo */}
         <div className="px-5 py-4 border-b border-[var(--border-default)] shrink-0">
-          <Link href="/dashboard" className="flex items-center gap-2.5">
+          <Link href={homeHref} className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-[var(--brand-blue)] flex items-center justify-center shrink-0">
               <span className="text-white font-bold text-sm">P</span>
             </div>
@@ -79,7 +106,7 @@ export function Sidebar() {
                 ProcureTech<span className="text-[var(--brand-blue)]">+</span>
               </div>
               <div className="text-[10px] text-[var(--text-tertiary)] mt-0.5 uppercase tracking-wider">
-                AI Procurement OS
+                {isSupplier ? 'Supplier Portal' : 'AI Procurement OS'}
               </div>
             </div>
           </Link>
@@ -87,7 +114,7 @@ export function Sidebar() {
 
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto py-3 px-3">
-          {NAV_SECTIONS.map(section => (
+          {sections.map(section => (
             <div key={section.label} className="mb-5">
               <div className="text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-widest px-2 mb-1">
                 {section.label}
@@ -130,18 +157,18 @@ export function Sidebar() {
           ))}
         </nav>
 
-        {/* Settings */}
-        <div className="px-3 pb-1">
-          <Link
-            href="/settings"
-            className={cn(
-              'flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--text-primary)] dark:hover:bg-white/5 transition-all duration-150'
-            )}
-          >
-            <Settings className="w-4 h-4 shrink-0 text-[var(--text-tertiary)]" />
-            <span>Settings</span>
-          </Link>
-        </div>
+        {/* Settings — internal users only */}
+        {!isSupplier && (
+          <div className="px-3 pb-1">
+            <Link
+              href="/settings"
+              className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--text-primary)] dark:hover:bg-white/5 transition-all duration-150"
+            >
+              <Settings className="w-4 h-4 shrink-0 text-[var(--text-tertiary)]" />
+              <span>Settings</span>
+            </Link>
+          </div>
+        )}
 
         {/* User Footer */}
         <div className="px-3 py-3 border-t border-[var(--border-default)] shrink-0">
