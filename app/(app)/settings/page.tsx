@@ -313,14 +313,14 @@ export default function SettingsPage() {
           {/* ── Notifications ── */}
           <TabsContent value="notifs">
             <div className="bg-white dark:bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] shadow-sm overflow-hidden">
-              <div className="px-6 py-4 border-b border-[var(--border-default)] grid grid-cols-3">
-                <span className="text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Event</span>
-                <span className="text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-wider text-center">Email</span>
-                <span className="text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-wider text-center">In-App</span>
+              <div className="px-6 py-3 border-b border-[var(--border-default)] grid grid-cols-3 bg-gray-50 dark:bg-white/5">
+                <span className="text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Event</span>
+                <span className="text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider text-center">Email</span>
+                <span className="text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider text-center">In-App</span>
               </div>
               <div className="divide-y divide-[var(--border-default)]">
                 {notifs.map(n => (
-                  <div key={n.id} className="px-6 py-3.5 grid grid-cols-3 items-center hover:bg-gray-50 dark:hover:bg-white/5">
+                  <div key={n.id} className="px-6 py-3 grid grid-cols-3 items-center hover:bg-gray-50 dark:hover:bg-white/5">
                     <span className="text-sm text-[var(--text-primary)]">{n.label}</span>
                     <div className="flex justify-center">
                       <button
@@ -403,8 +403,8 @@ export default function SettingsPage() {
                 </div>
 
                 {/* Column headers */}
-                <div className="px-6 py-2.5 border-b border-[var(--border-default)] grid grid-cols-[1fr_1.5fr_1fr_auto] gap-4 items-center">
-                  <span className="text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Name</span>
+                <div className="px-6 py-3 border-b border-[var(--border-default)] grid grid-cols-[1fr_1.5fr_1fr_auto] gap-4 items-center bg-gray-50 dark:bg-white/5">
+                  <span className="text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider pl-[42px]">Name</span>
                   <span className="text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Email</span>
                   <span className="text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Role</span>
                   <span className="text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Action</span>

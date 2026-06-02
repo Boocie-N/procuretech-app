@@ -262,7 +262,7 @@ export default function SuppliersPage() {
               <thead>
                 <tr className="border-b border-[var(--border-default)]">
                   {['Company', 'BBBEE', 'Status', 'Grade', 'Province', 'Categories', 'Response %', 'Quality', 'Orders'].map((h) => (
-                    <th key={h} className="text-left px-4 py-2.5 text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wide whitespace-nowrap">{h}</th>
+                    <th key={h} className="text-left px-4 py-3 text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wide whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>

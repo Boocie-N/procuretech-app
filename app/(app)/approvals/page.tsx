@@ -146,7 +146,7 @@ export default function ApprovalsPage() {
           <thead>
             <tr className="border-b border-[var(--border-default)] bg-gray-50">
               {['Reference', 'Title', 'Budget', 'Status', 'Officer', 'Manager', 'CFO', 'Legal'].map((h) => (
-                <th key={h} className="text-left px-4 py-2.5 text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wide">{h}</th>
+                <th key={h} className="text-left px-4 py-3 text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wide">{h}</th>
               ))}
             </tr>
           </thead>
