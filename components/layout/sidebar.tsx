@@ -157,18 +157,15 @@ export function Sidebar() {
           ))}
         </nav>
 
-        {/* Settings — internal users only */}
-        {!isSupplier && (
-          <div className="px-3 pb-1">
-            <Link
-              href="/settings"
-              className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--text-primary)] dark:hover:bg-white/5 transition-all duration-150"
-            >
-              <Settings className="w-4 h-4 shrink-0 text-[var(--text-tertiary)]" />
-              <span>Settings</span>
-            </Link>
-          </div>
-        )}
+        <div className="px-3 pb-1">
+          <Link
+            href="/settings"
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[var(--text-secondary)] hover:bg-gray-50 hover:text-[var(--text-primary)] dark:hover:bg-white/5 transition-all duration-150"
+          >
+            <Settings className="w-4 h-4 shrink-0 text-[var(--text-tertiary)]" />
+            <span>Settings</span>
+          </Link>
+        </div>
 
         {/* User Footer */}
         <div className="px-3 py-3 border-t border-[var(--border-default)] shrink-0">
