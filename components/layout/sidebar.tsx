@@ -10,8 +10,6 @@ import {
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/lib/auth-context';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
 
 interface NavItem {
   href: string;
@@ -68,8 +66,7 @@ export function Sidebar() {
     .split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() ?? 'U';
 
   return (
-    <TooltipProvider>
-      <aside className="flex flex-col w-60 shrink-0 h-screen bg-white dark:bg-[var(--bg-surface)] border-r border-[var(--border-default)] overflow-hidden">
+    <aside className="flex flex-col w-60 shrink-0 h-screen bg-white dark:bg-[var(--bg-surface)] border-r border-[var(--border-default)] overflow-hidden">
 
         {/* Logo */}
         <div className="px-5 py-4 border-b border-[var(--border-default)] shrink-0">
@@ -162,20 +159,15 @@ export function Sidebar() {
                 {user?.role?.replace('_', ' ') ?? ''}
               </div>
             </div>
-            <Tooltip>
-              <TooltipTrigger>
-                <button
-                  onClick={logout}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20"
-                >
-                  <LogOut className="w-3.5 h-3.5 text-red-500" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent>Sign out</TooltipContent>
-            </Tooltip>
+            <button
+              onClick={logout}
+              title="Sign out"
+              className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 shrink-0"
+            >
+              <LogOut className="w-3.5 h-3.5 text-red-500" />
+            </button>
           </div>
         </div>
-      </aside>
-    </TooltipProvider>
+    </aside>
   );
 }
