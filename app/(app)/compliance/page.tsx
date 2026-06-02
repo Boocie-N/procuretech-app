@@ -76,6 +76,16 @@ export default function CompliancePage() {
   const [deviationOpen, setDeviationOpen] = useState(false);
   const [coiOpen, setCoiOpen] = useState(false);
 
+  // Compute KPIs from real data
+  const currentYear = new Date().getFullYear();
+  const deviationsYTD = DEVIATIONS.filter(d => new Date(d.date).getFullYear() >= currentYear - 1).length;
+  const pendingDeviations = DEVIATIONS.filter(d => d.status === 'pending').length;
+  const coiCount = COI_REGISTER.length;
+  const activeRecusals = COI_REGISTER.filter(c => c.status === 'recused').length;
+  const latestMonth = PPPFA_TRACKER[0];
+  const pppfaCompliance = latestMonth ? latestMonth.bbbeeL1 + latestMonth.bbbeeL2 : 0;
+  const allCompliant = PPPFA_TRACKER.every(m => m.target90);
+
   return (
     <div className="flex flex-col flex-1 overflow-hidden">
       <Topbar
@@ -142,10 +152,10 @@ export default function CompliancePage() {
         {/* Summary cards */}
         <div className="grid grid-cols-4 gap-4 mb-6">
           {[
-            { label: 'Deviations YTD',     value: '3',   sub: '1 pending approval', color: 'amber', icon: AlertTriangle },
-            { label: 'COI Declarations',   value: '2',   sub: '1 recusal active',   color: 'blue',  icon: FileText },
-            { label: 'PPPFA Compliance',   value: '94%', sub: 'L1-4 spend target',  color: 'green', icon: ShieldCheck },
-            { label: 'Compliance Score',   value: 'A',   sub: 'Excellent standing', color: 'green', icon: CheckCircle2 },
+            { label: 'Deviations YTD',   value: String(deviationsYTD),        sub: `${pendingDeviations} pending approval`,  color: 'amber', icon: AlertTriangle },
+            { label: 'COI Declarations', value: String(coiCount),              sub: `${activeRecusals} recusal${activeRecusals !== 1 ? 's' : ''} active`, color: 'blue', icon: FileText },
+            { label: 'PPPFA Compliance', value: `${pppfaCompliance}%`,         sub: 'L1–2 spend (latest month)',              color: 'green', icon: ShieldCheck },
+            { label: 'Compliance Score', value: allCompliant ? 'A' : 'B',      sub: allCompliant ? 'All months on target' : 'One month below target', color: allCompliant ? 'green' : 'amber', icon: CheckCircle2 },
           ].map(c => (
             <div key={c.label} className="bg-white dark:bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] p-4 shadow-sm">
               <div className="flex items-center justify-between mb-2">

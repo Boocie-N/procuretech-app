@@ -247,7 +247,7 @@ export default function KnowledgePage() {
                 </div>
                 <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-1.5">{template.name}</h3>
                 <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-4">{template.description}</p>
-                <Link href="/copilot">
+                <Link href={`/copilot?template=${encodeURIComponent(template.name)}`}>
                   <Button
                     size="sm"
                     variant="outline"

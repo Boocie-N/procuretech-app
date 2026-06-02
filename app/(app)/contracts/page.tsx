@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Topbar } from '@/components/layout/topbar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -65,11 +66,19 @@ const statusLabel = (s: string) => ({
 }[s] ?? s);
 
 export default function ContractsPage() {
+  const router = useRouter();
   const [search, setSearch] = useState('');
 
   const filtered = CONTRACTS.filter(c =>
     c.title.toLowerCase().includes(search.toLowerCase()) ||
-    c.supplier.toLowerCase().includes(search.toLowerCase())
+    c.supplier.toLowerCase().includes(search.toLowerCase()) ||
+    c.id.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const filteredPos = POS.filter(po =>
+    po.number.toLowerCase().includes(search.toLowerCase()) ||
+    po.supplier.toLowerCase().includes(search.toLowerCase()) ||
+    po.item.toLowerCase().includes(search.toLowerCase())
   );
 
   const active       = filtered.filter(c => c.status === 'active');
@@ -140,7 +149,7 @@ export default function ContractsPage() {
           <div className="flex items-center justify-between mb-4">
             <TabsList>
               <TabsTrigger value="contracts">Contracts ({filtered.length})</TabsTrigger>
-              <TabsTrigger value="pos">Purchase Orders ({POS.length})</TabsTrigger>
+              <TabsTrigger value="pos">Purchase Orders ({filteredPos.length})</TabsTrigger>
             </TabsList>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--text-tertiary)]" />
@@ -189,7 +198,7 @@ export default function ContractsPage() {
                             <Download className="w-3.5 h-3.5 text-[var(--text-tertiary)]" />
                           </Button>
                           {c.status === 'expiring_soon' && (
-                            <Button size="sm" variant="outline" className="h-7 text-xs px-2 text-amber-600 border-amber-300" onClick={() => toast.info('Starting renewal procurement...')}>
+                            <Button size="sm" variant="outline" className="h-7 text-xs px-2 text-amber-600 border-amber-300" onClick={() => { toast.success('Opening new procurement for renewal...'); router.push('/procurements/new'); }}>
                               Renew
                             </Button>
                           )}
@@ -211,7 +220,7 @@ export default function ContractsPage() {
                   ))}</tr>
                 </thead>
                 <tbody className="divide-y divide-[var(--border-default)]">
-                  {POS.map(po => (
+                  {filteredPos.map(po => (
                     <tr key={po.number} className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                       <td className="px-5 py-3 font-mono text-xs text-[var(--brand-blue)]">{po.number}</td>
                       <td className="px-5 py-3 text-sm font-medium text-[var(--text-primary)]">{po.supplier}</td>

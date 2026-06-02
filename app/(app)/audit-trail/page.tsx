@@ -49,10 +49,11 @@ export default function AuditTrailPage() {
     procFilter === 'all' || e.procurement_id === procFilter
   );
 
-  // Verify chain integrity
+  // Verify chain integrity against the FULL chain, not just the filtered view
+  const sortedAll = [...DEMO_AUDIT_EVENTS].sort((a, b) => a.block_index - b.block_index);
   let chainIntact = true;
-  for (let i = 1; i < filtered.length; i++) {
-    if (filtered[i].prev_hash !== filtered[i - 1].block_hash) {
+  for (let i = 1; i < sortedAll.length; i++) {
+    if (sortedAll[i].prev_hash !== sortedAll[i - 1].block_hash) {
       chainIntact = false;
       break;
     }

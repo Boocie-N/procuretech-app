@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Topbar } from '@/components/layout/topbar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -13,57 +14,94 @@ const INVITED_RFQS = [
   { id: 'p4', ref: 'RFQ/PT/2025/046', title: 'Security Services — Sandton', category: 'Security',     budget: 560_000,   closing: '2025-01-15', status: 'closed', daysLeft: 0,  submitted: true  },
 ];
 
+const FILTER_TABS = [
+  { label: 'Open',     value: 'open' },
+  { label: 'All RFQs', value: 'all'  },
+];
+
 export default function SupplierRFQsPage() {
+  const [filter, setFilter] = useState<'open' | 'all'>('open');
+
   const open = INVITED_RFQS.filter(r => r.status === 'open' && !r.submitted).length;
+  const displayed = filter === 'open'
+    ? INVITED_RFQS.filter(r => r.status === 'open' && !r.submitted)
+    : INVITED_RFQS;
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden">
       <Topbar title="Open RFQs" subtitle={`${open} open · respond before the closing date`} />
 
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-6 space-y-4">
+        {/* Filter tabs */}
+        <div className="flex items-center gap-1 border-b border-[var(--border-default)]">
+          {FILTER_TABS.map(tab => (
+            <button
+              key={tab.value}
+              onClick={() => setFilter(tab.value as 'open' | 'all')}
+              className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-px ${
+                filter === tab.value
+                  ? 'border-emerald-600 text-emerald-600'
+                  : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+              }`}
+            >
+              {tab.label}
+              {tab.value === 'open' && open > 0 && (
+                <span className="ml-2 bg-emerald-600 text-white text-xs px-1.5 py-0.5 rounded-full">{open}</span>
+              )}
+            </button>
+          ))}
+        </div>
+
         <div className="bg-white dark:bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] shadow-sm overflow-hidden">
           <div className="px-5 py-3.5 border-b border-[var(--border-default)] flex items-center justify-between">
             <h3 className="text-sm font-semibold text-[var(--text-primary)]">RFQs You've Been Invited To</h3>
-            <Badge variant="outline" className="text-xs">{open} open</Badge>
+            <Badge variant="outline" className="text-xs">{displayed.length} showing</Badge>
           </div>
-          <div className="divide-y divide-[var(--border-default)]">
-            {INVITED_RFQS.map(rfq => (
-              <div key={rfq.id} className="px-5 py-5 flex items-start gap-4">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-sm font-semibold text-[var(--text-primary)]">{rfq.title}</span>
-                    <span className={cn('text-[10px] font-medium px-1.5 py-0.5 rounded-full',
-                      rfq.status === 'open' ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500'
-                    )}>{rfq.status === 'open' ? 'Open' : 'Closed'}</span>
+
+          {displayed.length === 0 ? (
+            <div className="px-5 py-12 text-center text-[var(--text-tertiary)] text-sm">
+              No open RFQs awaiting your bid. Check the &quot;All RFQs&quot; tab to see closed ones.
+            </div>
+          ) : (
+            <div className="divide-y divide-[var(--border-default)]">
+              {displayed.map(rfq => (
+                <div key={rfq.id} className="px-5 py-5 flex items-start gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm font-semibold text-[var(--text-primary)]">{rfq.title}</span>
+                      <span className={cn('text-[10px] font-medium px-1.5 py-0.5 rounded-full',
+                        rfq.status === 'open' ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500'
+                      )}>{rfq.status === 'open' ? 'Open' : 'Closed'}</span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--text-tertiary)]">
+                      <span className="font-mono text-emerald-600">{rfq.ref}</span>
+                      <span>·</span><span>{rfq.category}</span>
+                      <span>·</span><span>Budget: <strong className="text-[var(--text-primary)]">{formatCurrency(rfq.budget)}</strong></span>
+                      <span>·</span><span>Closes: <strong className="text-[var(--text-primary)]">{formatDate(rfq.closing)}</strong></span>
+                      {rfq.status === 'open' && (
+                        <span className="text-amber-600 font-semibold">· {rfq.daysLeft} days remaining</span>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--text-tertiary)]">
-                    <span className="font-mono text-emerald-600">{rfq.ref}</span>
-                    <span>·</span><span>{rfq.category}</span>
-                    <span>·</span><span>Budget: <strong className="text-[var(--text-primary)]">{formatCurrency(rfq.budget)}</strong></span>
-                    <span>·</span><span>Closes: <strong className="text-[var(--text-primary)]">{formatDate(rfq.closing)}</strong></span>
-                    {rfq.status === 'open' && (
-                      <span className="text-amber-600 font-semibold">· {rfq.daysLeft} days remaining</span>
+                  <div className="shrink-0">
+                    {rfq.submitted ? (
+                      <span className="text-xs text-green-600 flex items-center gap-1 font-medium">
+                        <CheckCircle2 className="w-3.5 h-3.5" /> Bid Submitted
+                      </span>
+                    ) : rfq.status === 'open' ? (
+                      <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs h-8">
+                        Submit Bid
+                      </Button>
+                    ) : (
+                      <Button size="sm" variant="outline" className="text-xs h-8 gap-1">
+                        <Eye className="w-3 h-3" /> View Results
+                      </Button>
                     )}
                   </div>
                 </div>
-                <div className="shrink-0">
-                  {rfq.submitted ? (
-                    <span className="text-xs text-green-600 flex items-center gap-1 font-medium">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> Bid Submitted
-                    </span>
-                  ) : rfq.status === 'open' ? (
-                    <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs h-8">
-                      Submit Bid
-                    </Button>
-                  ) : (
-                    <Button size="sm" variant="outline" className="text-xs h-8 gap-1">
-                      <Eye className="w-3 h-3" /> View Results
-                    </Button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -174,7 +174,7 @@ export default function ProcurementsPage() {
               )}
               {filtered.map((p, idx) => {
                 const stageIdx = getStageIndex(p.current_stage);
-                const stagePct = Math.round(((stageIdx + 1) / CIPS_STAGES.length) * 100);
+                const stagePct = Math.round((stageIdx / CIPS_STAGES.length) * 100);
                 const stageLabel = CIPS_STAGES[stageIdx]?.label ?? p.current_stage;
                 return (
                   <tr

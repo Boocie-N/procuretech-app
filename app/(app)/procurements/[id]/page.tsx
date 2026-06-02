@@ -6,7 +6,7 @@ import { ArrowLeft, CheckCircle, Clock, XCircle, Bot, FileText, Shield, MapPin, 
 import { Topbar } from '@/components/layout/topbar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { DEMO_PROCUREMENTS, DEMO_BIDS } from '@/lib/demo-data';
+import { DEMO_PROCUREMENTS, DEMO_BIDS, DEMO_USERS } from '@/lib/demo-data';
 import {
   formatCurrency,
   formatDate,
@@ -356,14 +356,11 @@ export default function ProcurementDetailPage({ params }: { params: Promise<{ id
                 </Link>
 
                 <button
-                  className="w-full flex items-center gap-3 p-3 rounded-lg border border-[var(--border-default)] hover:bg-gray-50 hover:border-gray-300 dark:hover:bg-white/5 transition-colors group text-left"
+                  disabled={bids.length === 0}
+                  className="w-full flex items-center gap-3 p-3 rounded-lg border border-[var(--border-default)] hover:bg-gray-50 hover:border-gray-300 dark:hover:bg-white/5 transition-colors group text-left disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-[var(--border-default)]"
                   onClick={async () => {
-                    if (bids.length > 0) {
-                      await generateEvaluationPDF(procurement, bids);
-                      toast.success('Evaluation report downloaded');
-                    } else {
-                      toast.info('No bids to include in report yet');
-                    }
+                    await generateEvaluationPDF(procurement, bids);
+                    toast.success('Evaluation report downloaded');
                   }}
                 >
                   <div className="w-9 h-9 rounded-lg bg-gray-100 dark:bg-white/10 flex items-center justify-center shrink-0">
@@ -371,7 +368,7 @@ export default function ProcurementDetailPage({ params }: { params: Promise<{ id
                   </div>
                   <div className="min-w-0">
                     <p className="text-sm font-medium text-[var(--text-primary)]">Download Evaluation PDF</p>
-                    <p className="text-[11px] text-[var(--text-tertiary)]">Bid scoring report</p>
+                    <p className="text-[11px] text-[var(--text-tertiary)]">{bids.length > 0 ? 'Bid scoring report' : 'No bids received yet'}</p>
                   </div>
                 </button>
 
@@ -388,7 +385,9 @@ export default function ProcurementDetailPage({ params }: { params: Promise<{ id
                 </div>
                 <div className="flex justify-between items-center">
                   <dt className="text-xs text-[var(--text-tertiary)]">Assigned To</dt>
-                  <dd className="text-xs font-medium text-[var(--text-primary)]">Thabo Mokoena</dd>
+                  <dd className="text-xs font-medium text-[var(--text-primary)]">
+                    {DEMO_USERS.find(u => u.id === procurement.assigned_to)?.full_name ?? '—'}
+                  </dd>
                 </div>
                 <div className="flex justify-between items-center">
                   <dt className="text-xs text-[var(--text-tertiary)]">Type</dt>

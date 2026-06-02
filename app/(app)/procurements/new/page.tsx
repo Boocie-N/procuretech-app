@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Bot, CheckCircle, Info, Plus, X } from 'lucide-react';
 import { Topbar } from '@/components/layout/topbar';
@@ -103,6 +103,16 @@ export default function NewProcurementPage() {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
+  // Pre-fill SOW if arriving from Copilot "Use in Procurement"
+  useEffect(() => {
+    const draft = sessionStorage.getItem('procuretech_sow_draft');
+    if (draft) {
+      setForm(prev => ({ ...prev, sow: draft }));
+      setStep(1);
+      sessionStorage.removeItem('procuretech_sow_draft');
+    }
+  }, []);
+
   async function handleGenerateSow() {
     if (!form.title || !form.category) {
       toast.error('Please fill in title and category first.');
@@ -145,7 +155,11 @@ export default function NewProcurementPage() {
       toast.error('Please select at least one supplier.');
       return;
     }
-    toast.success(`RFQ sent to ${selectedSuppliers.size} supplier(s)! Reference: RFQ/PT/2025/051`);
+    const typePrefix = (form.type === 'tender' ? 'TDR' : form.type === 'rfp' ? 'RFP' : 'RFQ').toUpperCase();
+    const year = new Date().getFullYear();
+    const seq = String(Math.floor(50 + Math.random() * 50)).padStart(3, '0');
+    const ref = `${typePrefix}/PT/${year}/${seq}`;
+    toast.success(`${typePrefix} sent to ${selectedSuppliers.size} supplier(s)! Reference: ${ref}`);
     setTimeout(() => router.push('/procurements'), 1500);
   }
 

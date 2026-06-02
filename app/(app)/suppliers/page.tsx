@@ -124,7 +124,9 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
 
       <div className="flex items-center justify-between">
         <span className="text-xs text-[var(--text-tertiary)]">Score: {supplier.grade?.total ?? 0}/100</span>
-        <Button size="sm" variant="outline" className="h-7 text-xs">View Profile</Button>
+        <Link href={`/suppliers/${supplier.id}`}>
+          <Button size="sm" variant="outline" className="h-7 text-xs">View Profile</Button>
+        </Link>
       </div>
     </div>
   );

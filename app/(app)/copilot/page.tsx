@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Topbar } from '@/components/layout/topbar';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
@@ -69,6 +70,8 @@ async function callAI(messages: { role: string; content: string }[], mode?: stri
 
 export default function CopilotPage() {
   const { user } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
@@ -84,6 +87,14 @@ export default function CopilotPage() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Auto-send if arriving from Knowledge page with a template query param
+  useEffect(() => {
+    const template = searchParams?.get('template');
+    if (template) {
+      setInput(`Generate a ${template} for me`);
+    }
+  }, [searchParams]);
 
   async function send() {
     const text = input.trim();
@@ -128,10 +139,9 @@ export default function CopilotPage() {
   }
 
   function linkToProcurement(content: string) {
-    // In a real implementation this would open a modal to pick a procurement
-    // For demo, navigate to new procurement with the content pre-filled
-    toast.success('Content copied — paste into the SOW field when creating a new procurement', { duration: 5000 });
-    navigator.clipboard.writeText(content);
+    sessionStorage.setItem('procuretech_sow_draft', content);
+    toast.success('Opening new procurement with this content pre-filled…');
+    router.push('/procurements/new');
   }
 
   function handleKey(e: React.KeyboardEvent) {

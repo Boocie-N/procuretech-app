@@ -13,7 +13,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { DEMO_PROCUREMENTS } from '@/lib/demo-data';
+import { DEMO_PROCUREMENTS, DEMO_USERS } from '@/lib/demo-data';
 import { useAuth } from '@/lib/auth-context';
 import { formatCurrency, formatDate, getStatusColor, STATUS_LABELS, ROLE_LABELS } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -34,45 +34,94 @@ function getPendingStep(procurement: Procurement) {
   return procurement.approval_chain.find((s) => s.status === 'pending');
 }
 
+function getUserName(userId: string): string {
+  return DEMO_USERS.find(u => u.id === userId)?.full_name ?? userId;
+}
+
 export default function ApprovalsPage() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('mine');
   const [approveTarget, setApproveTarget] = useState<Procurement | null>(null);
   const [comment, setComment] = useState('');
 
-  // Pending my approval: next pending step matches user's role
-  const pendingMine = DEMO_PROCUREMENTS.filter((p) => {
+  // Local mutable copy of procurements so approve/return actually updates the UI
+  const [procurements, setProcurements] = useState(() =>
+    DEMO_PROCUREMENTS.map(p => ({
+      ...p,
+      approval_chain: p.approval_chain.map(s => ({ ...s })),
+    }))
+  );
+
+  const pendingMine = procurements.filter((p) => {
     const pending = getPendingStep(p);
     return pending && user && pending.role === user.role;
   });
 
-  // All approvals
-  const allApprovals = DEMO_PROCUREMENTS;
+  const allApprovals = procurements;
 
-  // Approved: all steps approved
-  const fullyApproved = DEMO_PROCUREMENTS.filter((p) =>
+  const fullyApproved = procurements.filter((p) =>
     p.approval_chain.every((s) => s.status === 'approved')
   );
 
-  // Rejected: any step rejected
-  const rejected = DEMO_PROCUREMENTS.filter((p) =>
+  const rejected = procurements.filter((p) =>
     p.approval_chain.some((s) => s.status === 'rejected')
   );
 
   function handleApprove() {
-    if (!approveTarget) return;
-    toast.success(`Procurement ${approveTarget.reference} approved. Notification sent to next approver.`);
+    if (!approveTarget || !user) return;
+
+    setProcurements(prev =>
+      prev.map(p => {
+        if (p.id !== approveTarget.id) return p;
+        return {
+          ...p,
+          approval_chain: p.approval_chain.map(s => {
+            if (s.status === 'pending' && s.role === user.role) {
+              return {
+                ...s,
+                status: 'approved' as const,
+                approved_by: user.id,
+                approved_by_name: user.full_name,
+                actioned_at: new Date().toISOString(),
+                comments: comment || undefined,
+              };
+            }
+            return s;
+          }),
+        };
+      })
+    );
+
+    toast.success(`${approveTarget.reference} approved. Next approver has been notified.`);
     setApproveTarget(null);
     setComment('');
   }
 
   function handleReturn(proc: Procurement) {
-    toast.success(`Procurement ${proc.reference} returned for revision.`);
+    if (!user) return;
+
+    setProcurements(prev =>
+      prev.map(p => {
+        if (p.id !== proc.id) return p;
+        return {
+          ...p,
+          approval_chain: p.approval_chain.map(s => {
+            if (s.status === 'pending' && s.role === user.role) {
+              return { ...s, status: 'returned' as const, actioned_at: new Date().toISOString() };
+            }
+            return s;
+          }),
+        };
+      })
+    );
+
+    toast.success(`${proc.reference} returned for revision. Procurement officer has been notified.`);
   }
 
   function PendingCard({ proc }: { proc: Procurement }) {
     const pending = getPendingStep(proc);
     const days = daysSince(proc.updated_at);
+    const submitterName = proc.created_by ? getUserName(proc.created_by) : '—';
     return (
       <div className="bg-white border border-[var(--border-default)] rounded-xl shadow-sm p-5">
         <div className="flex items-start justify-between gap-4 mb-3">
@@ -98,7 +147,7 @@ export default function ApprovalsPage() {
           </div>
           <div>
             <p className="text-xs text-[var(--text-tertiary)]">Submitted By</p>
-            <p className="font-medium text-[var(--text-primary)]">Thabo Mokoena</p>
+            <p className="font-medium text-[var(--text-primary)]">{submitterName}</p>
           </div>
           <div>
             <p className="text-xs text-[var(--text-tertiary)]">Waiting</p>
@@ -139,7 +188,7 @@ export default function ApprovalsPage() {
     );
   }
 
-  function ApprovalChainTable({ procurements }: { procurements: Procurement[] }) {
+  function ApprovalChainTable({ procurements: list }: { procurements: Procurement[] }) {
     return (
       <div className="bg-white border border-[var(--border-default)] rounded-xl shadow-sm overflow-hidden">
         <table className="w-full text-sm">
@@ -151,10 +200,10 @@ export default function ApprovalsPage() {
             </tr>
           </thead>
           <tbody>
-            {procurements.length === 0 && (
+            {list.length === 0 && (
               <tr><td colSpan={8} className="px-4 py-12 text-center text-[var(--text-tertiary)]">No procurements found.</td></tr>
             )}
-            {procurements.map((p, idx) => {
+            {list.map((p, idx) => {
               const stepStatus = (step: number) => {
                 const s = p.approval_chain.find((a) => a.step === step);
                 if (!s) return null;
@@ -173,7 +222,7 @@ export default function ApprovalsPage() {
                 );
               };
               return (
-                <tr key={p.id} className={`border-b border-[var(--border-default)] hover:bg-gray-50 ${idx === procurements.length - 1 ? 'border-b-0' : ''}`}>
+                <tr key={p.id} className={`border-b border-[var(--border-default)] hover:bg-gray-50 ${idx === list.length - 1 ? 'border-b-0' : ''}`}>
                   <td className="px-4 py-3"><span className="font-mono text-xs text-[var(--brand-blue)]">{p.reference}</span></td>
                   <td className="px-4 py-3"><span className="text-[var(--text-primary)] font-medium">{p.title.slice(0, 30)}{p.title.length > 30 ? '…' : ''}</span></td>
                   <td className="px-4 py-3 font-medium text-[var(--text-primary)]">{formatCurrency(p.budget)}</td>
@@ -235,7 +284,7 @@ export default function ApprovalsPage() {
           </div>
         )}
 
-        {activeTab === 'all' && <ApprovalChainTable procurements={allApprovals} />}
+        {activeTab === 'all'      && <ApprovalChainTable procurements={allApprovals} />}
         {activeTab === 'approved' && <ApprovalChainTable procurements={fullyApproved} />}
         {activeTab === 'rejected' && <ApprovalChainTable procurements={rejected} />}
       </div>
