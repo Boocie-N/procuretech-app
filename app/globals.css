@@ -1,26 +1,178 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
+@custom-variant dark (&:is(.dark *));
+
+/* ── ProcureTech+ Design Tokens ──────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --brand-blue:       #1A56DB;
+  --brand-blue-light: #EFF6FF;
+  --brand-blue-dark:  #1E40AF;
+  --brand-green:      #059669;
+  --brand-green-light:#ECFDF5;
+
+  --bg-base:          #FAFAFA;
+  --bg-surface:       #FFFFFF;
+  --bg-elevated:      #F5F6F8;
+  --bg-subtle:        #F9FAFB;
+
+  --text-primary:     #111827;
+  --text-secondary:   #6B7280;
+  --text-tertiary:    #9CA3AF;
+  --text-inverse:     #FFFFFF;
+
+  --border-default:   #E5E7EB;
+  --border-strong:    #D1D5DB;
+  --border-brand:     #BFDBFE;
+
+  --status-success:   #059669;
+  --status-warning:   #D97706;
+  --status-danger:    #DC2626;
+  --status-info:      #2563EB;
+
+  --shadow-sm:  0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md:  0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg:  0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+
+  --radius: 0.5rem;
+  --radius-sm: 0.375rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* shadcn compat */
+  --background: oklch(0.98 0 0);
+  --foreground: oklch(0.13 0.01 264);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.13 0.01 264);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.13 0.01 264);
+  --primary: oklch(0.5 0.18 253);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.96 0.005 264);
+  --secondary-foreground: oklch(0.13 0.01 264);
+  --muted: oklch(0.96 0.005 264);
+  --muted-foreground: oklch(0.49 0.02 264);
+  --accent: oklch(0.96 0.005 264);
+  --accent-foreground: oklch(0.13 0.01 264);
+  --destructive: oklch(0.54 0.22 27);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.91 0.005 264);
+  --input: oklch(0.91 0.005 264);
+  --ring: oklch(0.5 0.18 253);
+  --chart-1: oklch(0.5 0.18 253);
+  --chart-2: oklch(0.4 0.14 162);
+  --chart-3: oklch(0.58 0.18 48);
+  --chart-4: oklch(0.56 0.18 293);
+  --chart-5: oklch(0.54 0.22 27);
+  --sidebar-background: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.13 0.01 264);
+  --sidebar-primary: oklch(0.5 0.18 253);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.96 0.005 264);
+  --sidebar-accent-foreground: oklch(0.13 0.01 264);
+  --sidebar-border: oklch(0.91 0.005 264);
+  --sidebar-ring: oklch(0.5 0.18 253);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  --bg-base:        #0F1117;
+  --bg-surface:     #1C1F26;
+  --bg-elevated:    #252932;
+  --bg-subtle:      #171A21;
+
+  --text-primary:   #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --text-tertiary:  #6B7280;
+  --text-inverse:   #111827;
+
+  --border-default: #374151;
+  --border-strong:  #4B5563;
+  --border-brand:   #1E3A5F;
+
+  --background: oklch(0.13 0.01 264);
+  --foreground: oklch(0.98 0 0);
+  --card: oklch(0.16 0.01 264);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.16 0.01 264);
+  --popover-foreground: oklch(0.98 0 0);
+  --primary: oklch(0.62 0.19 253);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.2 0.01 264);
+  --secondary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.2 0.01 264);
+  --muted-foreground: oklch(0.58 0.02 264);
+  --accent: oklch(0.2 0.01 264);
+  --accent-foreground: oklch(0.98 0 0);
+  --destructive: oklch(0.57 0.22 27);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.25 0.01 264);
+  --input: oklch(0.25 0.01 264);
+  --ring: oklch(0.62 0.19 253);
+  --sidebar-background: oklch(0.16 0.01 264);
+  --sidebar-foreground: oklch(0.98 0 0);
+  --sidebar-primary: oklch(0.62 0.19 253);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.2 0.01 264);
+  --sidebar-accent-foreground: oklch(0.98 0 0);
+  --sidebar-border: oklch(0.25 0.01 264);
+  --sidebar-ring: oklch(0.62 0.19 253);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+* { box-sizing: border-box; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
+
+/* Status accent bars */
+.status-bar-top { position: relative; overflow: hidden; }
+.status-bar-top::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.accent-blue::before   { background: var(--brand-blue); }
+.accent-green::before  { background: var(--brand-green); }
+.accent-amber::before  { background: var(--status-warning); }
+.accent-red::before    { background: var(--status-danger); }
+
+/* Animations */
+@keyframes typingBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50%       { transform: translateY(-4px); opacity: 1; }
+}
+.typing-dot { animation: typingBounce 1.2s infinite; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 0.2s ease forwards; }
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg,
+    var(--bg-elevated) 25%, var(--bg-surface) 50%, var(--bg-elevated) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+}
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+.pulse-dot { animation: pulse 2s infinite; }
+
+@media print { .no-print { display: none !important; } }
