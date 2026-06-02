@@ -331,6 +331,78 @@ export const DEMO_BIDS: Bid[] = [
     },
     recommendation: 'not_recommended',
   },
+
+  // ── p2: Office Furniture — Sandton HQ (awarded) ──────────────────────────────
+  {
+    id: 'b4', procurement_id: 'p2', supplier_id: 's1', supplier_name: 'Steelcase SA (Pty) Ltd',
+    unit_price: 3_938, total_price: 315_000, delivery_days: 14, warranty_months: 24,
+    technical_compliance: 96,
+    notes: 'Full installation included. Ergonomic chairs and height-adjustable desks. SABS-certified materials.',
+    documents: [], submitted_at: '2025-01-08T09:00:00Z',
+    ai_score: {
+      total: 91, price_score: 36, bbbee_score: 20, delivery_score: 18, technical_score: 17,
+      price_weight: 40, bbbee_weight: 20, delivery_weight: 20, technical_weight: 20,
+      strengths: ['BBBEE Level 1 — maximum preferential score', 'Price within budget', 'Full installation service included', 'SABS-certified products', 'Fast 14-day delivery'],
+      weaknesses: ['Slightly higher unit cost than runner-up'],
+      risks: [],
+      compliance_gaps: [],
+      ai_narrative: 'Steelcase SA presents the strongest bid for office furniture. BBBEE Level 1 maximises the preferential score and their full installation service eliminates operational disruption. Price is within budget with R25,000 headroom.',
+    },
+    recommendation: 'recommended',
+  },
+  {
+    id: 'b5', procurement_id: 'p2', supplier_id: 's2', supplier_name: 'TechPro Distributors',
+    unit_price: 3_750, total_price: 300_000, delivery_days: 21, warranty_months: 12,
+    technical_compliance: 80,
+    notes: 'Delivery only — no installation. 1-year warranty on manufacturing defects.',
+    documents: [], submitted_at: '2025-01-07T14:00:00Z',
+    ai_score: {
+      total: 72, price_score: 40, bbbee_score: 14, delivery_score: 12, technical_score: 6,
+      price_weight: 40, bbbee_weight: 20, delivery_weight: 20, technical_weight: 20,
+      strengths: ['Lowest price — R15,000 under budget', 'VAT compliant'],
+      weaknesses: ['No installation service', 'BBBEE Level 3', 'Slower 21-day delivery', '1-year warranty vs 2-year from competitor'],
+      risks: ['Installation cost not included — likely adds R20,000+'],
+      compliance_gaps: [],
+      ai_narrative: 'TechPro is price-competitive but the absence of installation service negates the cost saving when factoring in third-party fitting. BBBEE Level 3 also reduces the preferential score.',
+    },
+    recommendation: 'second',
+  },
+
+  // ── p4: Security Services — 24/7 Sandton Complex (awarded) ───────────────────
+  {
+    id: 'b6', procurement_id: 'p4', supplier_id: 's5', supplier_name: 'Ndalo Security Services',
+    unit_price: 15_000, total_price: 540_000, delivery_days: 7, warranty_months: 0,
+    technical_compliance: 99,
+    notes: 'PSIRA Grade C guards. 24/7 armed response. Incident reporting system included.',
+    documents: [], submitted_at: '2024-12-18T09:00:00Z',
+    ai_score: {
+      total: 95, price_score: 38, bbbee_score: 18, delivery_score: 20, technical_score: 19,
+      price_weight: 40, bbbee_weight: 20, delivery_weight: 20, technical_weight: 20,
+      strengths: ['PSIRA fully registered', 'BBBEE Level 2', 'Can mobilise within 7 days', '100% on-time delivery track record', 'Incident reporting system included at no extra cost'],
+      weaknesses: [],
+      risks: [],
+      compliance_gaps: [],
+      ai_narrative: 'Ndalo Security Services is the clear recommendation. Their PSIRA compliance, BBBEE Level 2 status, and exceptional 100% on-time track record make them the optimal choice. The 7-day mobilisation period meets the operational requirement.',
+    },
+    recommendation: 'recommended',
+  },
+  {
+    id: 'b7', procurement_id: 'p4', supplier_id: 's6', supplier_name: 'GlobalTech SA (Pty) Ltd',
+    unit_price: 14_200, total_price: 511_200, delivery_days: 14, warranty_months: 0,
+    technical_compliance: 60,
+    notes: 'Unarmed guards only. PSIRA registration pending renewal.',
+    documents: [], submitted_at: '2024-12-19T11:00:00Z',
+    ai_score: {
+      total: 41, price_score: 40, bbbee_score: 4, delivery_score: 8, technical_score: -11,
+      price_weight: 40, bbbee_weight: 20, delivery_weight: 20, technical_weight: 20,
+      strengths: ['Lower monthly cost'],
+      weaknesses: ['PSIRA registration lapsed — disqualifying', 'Unarmed guards do not meet RFQ spec', 'BBBEE Level 7', '14-day mobilisation too slow'],
+      risks: ['Legal liability if guards not PSIRA registered', 'Inadequate security level for armed site'],
+      compliance_gaps: ['PSIRA registration expired — legally cannot provide security services', 'Unarmed guards do not meet the armed security specification in the RFQ'],
+      ai_narrative: 'GlobalTech SA is disqualified on two critical grounds: their PSIRA registration has lapsed (a legal requirement) and they can only provide unarmed guards, which does not meet the RFQ specification for armed security.',
+    },
+    recommendation: 'not_recommended',
+  },
 ];
 
 // ─── Demo Audit Events ────────────────────────────────────────────────────────
