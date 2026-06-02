@@ -181,120 +181,21 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[var(--bg-base)] flex">
 
-      {/* ── Left panel — role selector ── */}
-      <div className="flex-1 flex flex-col items-center justify-center p-8 lg:p-12 overflow-y-auto">
-        <div className="w-full max-w-md">
-
-          {/* Mobile logo */}
-          <div className="lg:hidden flex items-center gap-2.5 mb-8">
-            <Logomark size={32} />
-            <div className="font-bold text-[var(--text-primary)]">
-              ProcureTech<span className="text-[var(--brand-blue)]">+</span>
-            </div>
-          </div>
-
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Sign in to your workspace</h1>
-            <p className="text-sm text-[var(--text-secondary)]">
-              Select a demo persona to explore the platform.
-            </p>
-          </div>
-
-          {/* Role list */}
-          <div className="space-y-2 mb-6">
-            {DEMO_USERS.map(u => {
-              const meta = ROLE_META[u.role];
-              const Icon = meta.icon;
-              const initials = u.full_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
-              const isSelected = selected === u.id;
-
-              return (
-                <button
-                  key={u.id}
-                  onClick={() => setSelected(u.id)}
-                  className={cn(
-                    'w-full flex items-center gap-4 px-4 py-3.5 rounded-xl border-2 transition-all duration-150 text-left',
-                    meta.color,
-                    isSelected
-                      ? 'shadow-md ring-2 ring-[var(--brand-blue)] ring-offset-1 border-transparent dark:ring-offset-gray-900'
-                      : 'shadow-none'
-                  )}
-                >
-                  {/* Avatar */}
-                  <div className={cn('w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-sm font-bold', meta.avatarBg, meta.avatarText)}>
-                    {initials}
-                  </div>
-
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-sm font-semibold text-[var(--text-primary)] truncate">{u.full_name}</span>
-                      <span className={cn('text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full shrink-0', meta.badge)}>
-                        {ROLE_LABELS[u.role]}
-                      </span>
-                    </div>
-                    <p className="text-xs text-[var(--text-secondary)] truncate">{meta.desc}</p>
-                  </div>
-
-                  {/* Selection indicator */}
-                  <div className={cn(
-                    'w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all',
-                    isSelected
-                      ? 'bg-[var(--brand-blue)] border-[var(--brand-blue)]'
-                      : 'border-gray-300 dark:border-gray-600'
-                  )}>
-                    {isSelected && <Check className="w-3 h-3 text-white" />}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          <Button
-            onClick={handleEnter}
-            disabled={!selected}
-            className={cn(
-              'w-full h-11 text-sm font-semibold gap-2 transition-all',
-              selected
-                ? 'bg-[var(--brand-blue)] hover:bg-[var(--brand-blue-dark)] text-white shadow-md'
-                : 'bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-gray-800 dark:text-gray-600'
-            )}
-          >
-            Enter Platform
-            <ArrowRight className="w-4 h-4" />
-          </Button>
-
-          <p className="text-center text-xs text-[var(--text-tertiary)] mt-4">
-            Demo version · No real data is used or stored externally
-          </p>
-        </div>
-      </div>
-
-      {/* ── Right panel — branding ── */}
-      <div className="hidden lg:flex flex-col w-[440px] shrink-0 bg-[var(--brand-blue)] text-white p-10 relative overflow-hidden">
-        {/* Low-opacity procurement graphic */}
-        <div className="absolute inset-0 opacity-[0.04]">
-          <ProcurementGraphic />
-        </div>
-
-        {/* Dot grid overlay */}
+      {/* ── Left panel — branding (blue) ── */}
+      <div className="hidden lg:flex flex-col w-[420px] shrink-0 bg-[var(--brand-blue)] text-white p-10 relative overflow-hidden">
+        {/* Dot grid */}
         <div
           className="absolute inset-0 opacity-[0.07]"
           style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '28px 28px' }}
         />
+        {/* Procurement SVG graphic */}
+        <div className="absolute inset-0 opacity-[0.04]">
+          <ProcurementGraphic />
+        </div>
 
         <div className="relative z-10 flex flex-col h-full">
-          {/* Logo */}
-          <div className="flex items-center gap-3 mb-12">
-            <Logomark size={40} />
-            <div>
-              <div className="font-bold text-xl leading-none">ProcureTech<span className="opacity-70">+</span></div>
-              <div className="text-xs text-blue-200 mt-0.5 uppercase tracking-wider">AI Procurement OS</div>
-            </div>
-          </div>
-
-          {/* Headline */}
-          <div className="mb-10">
+          {/* Headline — no logo block here */}
+          <div className="mb-10 mt-4">
             <h2 className="text-3xl font-bold leading-tight mb-4">
               South Africa's first intelligent procurement platform
             </h2>
@@ -322,6 +223,108 @@ export default function LoginPage() {
           <div className="mt-8 pt-6 border-t border-white/20">
             <p className="text-blue-200 text-xs">South Africa · PPPFA 2017 · CIPS Standard · BBBEE Compliant</p>
           </div>
+        </div>
+      </div>
+
+      {/* ── Right panel — role selector (white) ── */}
+      <div className="flex-1 flex flex-col items-center justify-center p-8 lg:p-12 overflow-y-auto relative">
+
+        {/* Low-opacity procurement background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-[0.04] pointer-events-none"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1400&q=80')" }}
+          aria-hidden="true"
+        />
+
+        <div className="w-full max-w-md relative z-10">
+
+          {/* Header row: heading on left, logo on far right */}
+          <div className="flex items-start justify-between gap-4 mb-8">
+            <div>
+              {/* Mobile-only logo (shown when left panel is hidden) */}
+              <div className="lg:hidden flex items-center gap-2.5 mb-4">
+                <Logomark size={32} />
+                <div className="font-bold text-[var(--text-primary)]">
+                  ProcureTech<span className="text-[var(--brand-blue)]">+</span>
+                </div>
+              </div>
+              <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-1">Sign in to your workspace</h1>
+              <p className="text-sm text-[var(--text-secondary)]">Select a demo persona to explore the platform.</p>
+            </div>
+
+            {/* Logo — far right, desktop only */}
+            <div className="hidden lg:flex flex-col items-center gap-1.5 shrink-0 pt-1">
+              <Logomark size={52} />
+              <div className="text-center">
+                <div className="font-bold text-sm text-[var(--text-primary)] leading-none">
+                  ProcureTech<span className="text-[var(--brand-blue)]">+</span>
+                </div>
+                <div className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-wider mt-0.5">
+                  AI Procurement OS
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Role list */}
+          <div className="space-y-2 mb-6">
+            {DEMO_USERS.map(u => {
+              const meta = ROLE_META[u.role];
+              const initials = u.full_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+              const isSelected = selected === u.id;
+
+              return (
+                <button
+                  key={u.id}
+                  onClick={() => setSelected(u.id)}
+                  className={cn(
+                    'w-full flex items-center gap-4 px-4 py-3.5 rounded-xl border-2 transition-all duration-150 text-left',
+                    meta.color,
+                    isSelected
+                      ? 'shadow-md ring-2 ring-[var(--brand-blue)] ring-offset-1 border-transparent dark:ring-offset-gray-900'
+                      : 'shadow-none'
+                  )}
+                >
+                  <div className={cn('w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-sm font-bold', meta.avatarBg, meta.avatarText)}>
+                    {initials}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-sm font-semibold text-[var(--text-primary)] truncate">{u.full_name}</span>
+                      <span className={cn('text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full shrink-0', meta.badge)}>
+                        {ROLE_LABELS[u.role]}
+                      </span>
+                    </div>
+                    <p className="text-xs text-[var(--text-secondary)] truncate">{meta.desc}</p>
+                  </div>
+                  <div className={cn(
+                    'w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all',
+                    isSelected ? 'bg-[var(--brand-blue)] border-[var(--brand-blue)]' : 'border-gray-300 dark:border-gray-600'
+                  )}>
+                    {isSelected && <Check className="w-3 h-3 text-white" />}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          <Button
+            onClick={handleEnter}
+            disabled={!selected}
+            className={cn(
+              'w-full h-11 text-sm font-semibold gap-2 transition-all',
+              selected
+                ? 'bg-[var(--brand-blue)] hover:bg-[var(--brand-blue-dark)] text-white shadow-md'
+                : 'bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-gray-800 dark:text-gray-600'
+            )}
+          >
+            Enter Platform
+            <ArrowRight className="w-4 h-4" />
+          </Button>
+
+          <p className="text-center text-xs text-[var(--text-tertiary)] mt-4">
+            Demo version · No real data is used or stored externally
+          </p>
         </div>
       </div>
 
