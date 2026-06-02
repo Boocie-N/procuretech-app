@@ -248,17 +248,21 @@ export default function SettingsPage() {
                     <div className="flex justify-center">
                       <button
                         onClick={() => toggleNotif(n.id, 'email')}
-                        className={cn('w-10 h-5 rounded-full transition-colors relative', n.email ? 'bg-[var(--brand-blue)]' : 'bg-gray-200 dark:bg-gray-700')}
+                        aria-checked={n.email}
+                        role="switch"
+                        className={cn('w-11 h-6 rounded-full transition-colors relative overflow-hidden', n.email ? 'bg-[var(--brand-blue)]' : 'bg-gray-200 dark:bg-gray-700')}
                       >
-                        <span className={cn('absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform', n.email ? 'translate-x-5' : 'translate-x-0.5')} />
+                        <span className={cn('absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200', n.email ? 'translate-x-5' : 'translate-x-0')} />
                       </button>
                     </div>
                     <div className="flex justify-center">
                       <button
                         onClick={() => toggleNotif(n.id, 'inApp')}
-                        className={cn('w-10 h-5 rounded-full transition-colors relative', n.inApp ? 'bg-[var(--brand-blue)]' : 'bg-gray-200 dark:bg-gray-700')}
+                        aria-checked={n.inApp}
+                        role="switch"
+                        className={cn('w-11 h-6 rounded-full transition-colors relative overflow-hidden', n.inApp ? 'bg-[var(--brand-blue)]' : 'bg-gray-200 dark:bg-gray-700')}
                       >
-                        <span className={cn('absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform', n.inApp ? 'translate-x-5' : 'translate-x-0.5')} />
+                        <span className={cn('absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200', n.inApp ? 'translate-x-5' : 'translate-x-0')} />
                       </button>
                     </div>
                   </div>

@@ -229,6 +229,191 @@ export async function generateEvaluationPDF(procurement: {
   doc.save(`${procurement.reference.replace(/\//g, '-')}-evaluation.pdf`);
 }
 
+// ─── Rich PDF content renderer ───────────────────────────────────────────────
+
+type ContentBlock =
+  | { kind: 'h1'; text: string }
+  | { kind: 'h2'; text: string }
+  | { kind: 'h3'; text: string }
+  | { kind: 'bullet'; text: string; depth: number }
+  | { kind: 'numbered'; text: string; num: number }
+  | { kind: 'para'; text: string }
+  | { kind: 'rule' }
+  | { kind: 'spacer' };
+
+function parseContent(raw: string): ContentBlock[] {
+  const blocks: ContentBlock[] = [];
+  const lines = raw.split('\n');
+  let numCounter = 0;
+
+  for (const rawLine of lines) {
+    const line = rawLine;
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      blocks.push({ kind: 'spacer' });
+      numCounter = 0;
+      continue;
+    }
+    if (/^---+$/.test(trimmed) || /^===+$/.test(trimmed)) {
+      blocks.push({ kind: 'rule' });
+      continue;
+    }
+    if (trimmed.startsWith('# ')) {
+      blocks.push({ kind: 'h1', text: trimmed.slice(2) });
+      continue;
+    }
+    if (trimmed.startsWith('## ')) {
+      blocks.push({ kind: 'h2', text: trimmed.slice(3) });
+      continue;
+    }
+    if (trimmed.startsWith('### ')) {
+      blocks.push({ kind: 'h3', text: trimmed.slice(4) });
+      continue;
+    }
+    // Detect section headers: short lines ending with colon, or ALL CAPS short lines
+    if (/^[A-Z][A-Z\s\d&:/-]{3,50}:?\s*$/.test(trimmed) && !trimmed.includes('.')) {
+      blocks.push({ kind: 'h2', text: trimmed.replace(/:$/, '') });
+      continue;
+    }
+    // Bullet: -, •, *, or indented -
+    const bulletMatch = line.match(/^(\s*)([-•*])\s+(.+)/);
+    if (bulletMatch) {
+      const depth = Math.floor(bulletMatch[1].length / 2);
+      blocks.push({ kind: 'bullet', text: bulletMatch[3], depth });
+      numCounter = 0;
+      continue;
+    }
+    // Numbered list
+    const numMatch = trimmed.match(/^(\d+)[.)]\s+(.+)/);
+    if (numMatch) {
+      numCounter = parseInt(numMatch[1]);
+      blocks.push({ kind: 'numbered', text: numMatch[2], num: numCounter });
+      continue;
+    }
+    numCounter = 0;
+    blocks.push({ kind: 'para', text: trimmed });
+  }
+  return blocks;
+}
+
+// Strip markdown bold/italic markers for clean PDF text
+function cleanText(t: string) {
+  return t.replace(/\*\*(.+?)\*\*/g, '$1').replace(/\*(.+?)\*/g, '$1').replace(/__(.+?)__/g, '$1');
+}
+
+async function renderRichPDF(
+  doc: InstanceType<Awaited<typeof import('jspdf')>['jsPDF']>,
+  blocks: ContentBlock[],
+  startY: number,
+  blue: [number, number, number],
+  gray: [number, number, number],
+  dark: [number, number, number],
+) {
+  let y = startY;
+  const margin = 14;
+  const maxW = 182;
+  const pageH = 285;
+
+  function newPageIfNeeded(needed = 10) {
+    if (y + needed > pageH) { doc.addPage(); y = 20; }
+  }
+
+  for (const block of blocks) {
+    switch (block.kind) {
+      case 'spacer':
+        y += 3;
+        break;
+
+      case 'rule':
+        newPageIfNeeded(6);
+        doc.setDrawColor(...gray);
+        doc.setLineWidth(0.2);
+        doc.line(margin, y, margin + maxW, y);
+        y += 5;
+        break;
+
+      case 'h1':
+        newPageIfNeeded(14);
+        y += 4;
+        doc.setFontSize(13);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(...dark);
+        doc.text(cleanText(block.text), margin, y);
+        y += 3;
+        doc.setDrawColor(...blue);
+        doc.setLineWidth(0.4);
+        doc.line(margin, y, margin + maxW, y);
+        y += 7;
+        break;
+
+      case 'h2':
+        newPageIfNeeded(12);
+        y += 4;
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(...dark);
+        doc.text(cleanText(block.text), margin, y);
+        y += 6;
+        break;
+
+      case 'h3':
+        newPageIfNeeded(10);
+        y += 3;
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(...dark);
+        doc.text(cleanText(block.text), margin, y);
+        y += 5;
+        break;
+
+      case 'bullet': {
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(...dark);
+        const indent = margin + 4 + block.depth * 6;
+        const bulletChar = block.depth === 0 ? '•' : '–';
+        const textW = maxW - (indent - margin) - 6;
+        const wrappedLines = doc.splitTextToSize(cleanText(block.text), textW);
+        newPageIfNeeded(wrappedLines.length * 5 + 2);
+        doc.setTextColor(...gray);
+        doc.text(bulletChar, indent, y);
+        doc.setTextColor(...dark);
+        doc.text(wrappedLines, indent + 5, y);
+        y += wrappedLines.length * 5 + 1;
+        break;
+      }
+
+      case 'numbered': {
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(...dark);
+        const textW = maxW - 12;
+        const wrappedLines = doc.splitTextToSize(cleanText(block.text), textW);
+        newPageIfNeeded(wrappedLines.length * 5 + 2);
+        doc.setTextColor(...gray);
+        doc.text(`${block.num}.`, margin + 2, y);
+        doc.setTextColor(...dark);
+        doc.text(wrappedLines, margin + 10, y);
+        y += wrappedLines.length * 5 + 1;
+        break;
+      }
+
+      case 'para': {
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(...dark);
+        const wrappedLines = doc.splitTextToSize(cleanText(block.text), maxW);
+        newPageIfNeeded(wrappedLines.length * 5.5);
+        doc.text(wrappedLines, margin, y);
+        y += wrappedLines.length * 5.5 + 1;
+        break;
+      }
+    }
+  }
+  return y;
+}
+
 export async function generateSOWPDF(title: string, content: string, ref: string) {
   const { jsPDF } = await import('jspdf');
   const doc = new jsPDF();
@@ -237,12 +422,14 @@ export async function generateSOWPDF(title: string, content: string, ref: string
   const gray = [107, 114, 128] as [number, number, number];
   const dark = [17, 24, 39] as [number, number, number];
 
+  // Header bar
   doc.setFillColor(...blue);
   doc.rect(0, 0, 210, 12, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(8);
   doc.text('ProcureTech+ | AI Procurement OS | Confidential', 14, 8);
 
+  // Title
   let y = 28;
   doc.setTextColor(...dark);
   doc.setFontSize(16);
@@ -259,22 +446,23 @@ export async function generateSOWPDF(title: string, content: string, ref: string
   doc.setDrawColor(...blue);
   doc.setLineWidth(0.5);
   doc.line(14, y, 196, y);
-  y += 8;
+  y += 10;
 
-  doc.setFontSize(9);
-  doc.setTextColor(...dark);
-  const lines = doc.splitTextToSize(content, 180);
-  lines.forEach((line: string) => {
-    if (y > 275) { doc.addPage(); y = 20; }
-    doc.text(line, 14, y);
-    y += 5.5;
-  });
+  // Render content with rich formatting
+  const blocks = parseContent(content);
+  await renderRichPDF(doc as any, blocks, y, blue, gray, dark);
 
-  doc.setFillColor(249, 250, 251);
-  doc.rect(0, 285, 210, 12, 'F');
-  doc.setFontSize(7);
-  doc.setTextColor(...gray);
-  doc.text('Generated by ProcureTech+ AI · Review before use', 14, 292);
+  // Footer on every page
+  const pageCount = doc.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setFillColor(249, 250, 251);
+    doc.rect(0, 285, 210, 12, 'F');
+    doc.setFontSize(7);
+    doc.setTextColor(...gray);
+    doc.text('Generated by ProcureTech+ AI · Review before use', 14, 292);
+    doc.text(`Page ${i} of ${pageCount}`, 196, 292, { align: 'right' });
+  }
 
-  doc.save(`${ref.replace(/\//g, '-')}-sow.pdf`);
+  doc.save(`${ref.replace(/\//g, '-')}-document.pdf`);
 }
