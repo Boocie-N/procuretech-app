@@ -4,9 +4,9 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Plus, Search, Eye } from 'lucide-react';
 import { Topbar } from '@/components/layout/topbar';
+import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import {
   Select,
@@ -57,12 +57,20 @@ function matchesTab(status: ProcurementStatus, tab: string): boolean {
 }
 
 export default function ProcurementsPage() {
+  const { user, can } = useAuth();
   const [activeTab, setActiveTab] = useState('all');
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
 
+  // Officers see only their own; roles with view_all_procurements see everything
+  const baseProcurements = useMemo(() => {
+    if (!user) return DEMO_PROCUREMENTS;
+    if (can('view_all_procurements')) return DEMO_PROCUREMENTS;
+    return DEMO_PROCUREMENTS.filter(p => p.assigned_to === user.id || p.created_by === user.id);
+  }, [user, can]);
+
   const filtered = useMemo(() => {
-    return DEMO_PROCUREMENTS.filter((p) => {
+    return baseProcurements.filter((p) => {
       if (!matchesTab(p.status, activeTab)) return false;
       if (categoryFilter !== 'all' && p.category !== categoryFilter) return false;
       if (search) {
@@ -75,15 +83,18 @@ export default function ProcurementsPage() {
       }
       return true;
     });
-  }, [activeTab, search, categoryFilter]);
+  }, [baseProcurements, activeTab, search, categoryFilter]);
 
-  const categories = Array.from(new Set(DEMO_PROCUREMENTS.map((p) => p.category)));
+  const categories = Array.from(new Set(baseProcurements.map((p) => p.category)));
+
+  const pageTitle = can('view_all_procurements') ? 'All Procurements' : 'My Procurements';
+  const pageSubtitle = `${baseProcurements.length} ${can('view_all_procurements') ? 'total' : 'assigned to you'}`;
 
   return (
     <div className="flex flex-col h-full">
       <Topbar
-        title="My Procurements"
-        subtitle={`${DEMO_PROCUREMENTS.length} total procurements`}
+        title={pageTitle}
+        subtitle={pageSubtitle}
         actions={
           <Link href="/procurements/new">
             <Button size="sm" className="bg-[var(--brand-blue)] hover:bg-blue-700 text-white gap-1.5 h-8 text-xs">
@@ -216,7 +227,7 @@ export default function ProcurementsPage() {
 
         {/* Summary */}
         <p className="text-xs text-[var(--text-tertiary)] text-right">
-          Showing {filtered.length} of {DEMO_PROCUREMENTS.length} procurements
+          Showing {filtered.length} of {baseProcurements.length} procurements
         </p>
       </div>
     </div>
