@@ -229,12 +229,70 @@ export default function LoginPage() {
       {/* ── Right panel — role selector (white) ── */}
       <div className="flex-1 flex flex-col items-center justify-center p-8 lg:p-12 overflow-y-auto relative">
 
-        {/* Low-opacity procurement background image */}
+        {/* Dot grid — mirrors left panel */}
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-[0.04] pointer-events-none"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1400&q=80')" }}
+          className="absolute inset-0 opacity-[0.06] pointer-events-none"
+          style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #1e3a5f 1px, transparent 0)', backgroundSize: '28px 28px' }}
           aria-hidden="true"
         />
+        {/* Procurement SVG graphic — mirrors left panel, dark strokes */}
+        <div className="absolute inset-0 opacity-[0.05] pointer-events-none" aria-hidden="true">
+          <svg
+            viewBox="0 0 600 600"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            {[
+              [80, 120], [200, 80], [340, 100], [480, 80], [540, 200],
+              [460, 320], [520, 440], [380, 500], [220, 490], [100, 400],
+              [60, 270], [170, 210], [310, 240], [440, 220], [300, 380],
+            ].map(([cx, cy], i) => (
+              <circle key={i} cx={cx} cy={cy} r={i % 3 === 0 ? 28 : i % 3 === 1 ? 18 : 12} stroke="#1e3a5f" strokeWidth="1.5" fill="none" />
+            ))}
+            {[
+              [80, 120], [200, 80], [340, 100], [480, 80], [540, 200],
+              [460, 320], [520, 440], [380, 500], [220, 490], [100, 400],
+              [60, 270], [170, 210], [310, 240], [440, 220], [300, 380],
+            ].map(([cx, cy], i) => (
+              <circle key={`d${i}`} cx={cx} cy={cy} r={4} fill="#1e3a5f" />
+            ))}
+            {[
+              [80,120,200,80], [200,80,340,100], [340,100,480,80], [480,80,540,200],
+              [540,200,460,320], [460,320,520,440], [520,440,380,500], [380,500,220,490],
+              [220,490,100,400], [100,400,60,270], [60,270,80,120],
+              [170,210,310,240], [310,240,440,220], [170,210,100,400],
+              [310,240,300,380], [440,220,460,320], [300,380,380,500],
+              [200,80,170,210], [340,100,310,240], [480,80,440,220],
+            ].map(([x1,y1,x2,y2], i) => (
+              <line key={`l${i}`} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#1e3a5f" strokeWidth="0.8" strokeDasharray={i % 4 === 0 ? '6 4' : 'none'} />
+            ))}
+            {[[130, 290], [390, 160], [250, 330], [470, 390]].map(([x, y], i) => (
+              <g key={`doc${i}`}>
+                <rect x={x} y={y} width={44} height={56} rx={4} stroke="#1e3a5f" strokeWidth="1.2" fill="none" />
+                <line x1={x+8} y1={y+16} x2={x+36} y2={y+16} stroke="#1e3a5f" strokeWidth="1" />
+                <line x1={x+8} y1={y+26} x2={x+36} y2={y+26} stroke="#1e3a5f" strokeWidth="1" />
+                <line x1={x+8} y1={y+36} x2={x+26} y2={y+36} stroke="#1e3a5f" strokeWidth="1" />
+                <path d={`M${x+32} ${y} L${x+44} ${y+12} L${x+32} ${y+12} Z`} stroke="#1e3a5f" strokeWidth="1" fill="none" />
+              </g>
+            ))}
+            {[[50, 450], [460, 120]].map(([bx, by], i) => (
+              <g key={`bar${i}`}>
+                {[0,1,2,3].map(j => (
+                  <rect key={j} x={bx + j*14} y={by + [24,10,30,16][j]} width={10} height={[18,32,12,26][j]} rx={2} stroke="#1e3a5f" strokeWidth="1" fill="none" />
+                ))}
+              </g>
+            ))}
+            {[[270, 430], [130, 150]].map(([tx, ty]) => (
+              <g key={`truck${tx}`}>
+                <rect x={tx} y={ty} width={52} height={30} rx={3} stroke="#1e3a5f" strokeWidth="1.2" fill="none" />
+                <rect x={tx+36} y={ty+6} width={24} height={24} rx={3} stroke="#1e3a5f" strokeWidth="1.2" fill="none" />
+                <circle cx={tx+14} cy={ty+33} r={6} stroke="#1e3a5f" strokeWidth="1.2" fill="none" />
+                <circle cx={tx+46} cy={ty+33} r={6} stroke="#1e3a5f" strokeWidth="1.2" fill="none" />
+              </g>
+            ))}
+          </svg>
+        </div>
 
         {/* Logo — absolutely pinned to top-right corner, desktop only */}
         <div className="hidden lg:flex absolute top-8 right-10 flex-col items-center gap-2 z-10">
