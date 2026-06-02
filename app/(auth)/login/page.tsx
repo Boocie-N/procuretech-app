@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { DEMO_USERS } from '@/lib/demo-data';
@@ -52,8 +52,15 @@ const FEATURES = [
 
 export default function LoginPage() {
   const [selected, setSelected] = useState<string | null>(null);
-  const { login } = useAuth();
+  const { login, user, isLoading } = useAuth();
   const router = useRouter();
+
+  // Already logged in — skip login screen
+  useEffect(() => {
+    if (!isLoading && user) {
+      router.replace(user.role === 'supplier' ? '/supplier-portal' : '/dashboard');
+    }
+  }, [user, isLoading, router]);
 
   function handleEnter() {
     if (!selected) return;
