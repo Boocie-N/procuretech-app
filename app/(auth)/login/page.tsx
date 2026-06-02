@@ -236,34 +236,32 @@ export default function LoginPage() {
           aria-hidden="true"
         />
 
+        {/* Logo — absolutely pinned to top-right corner, desktop only */}
+        <div className="hidden lg:flex absolute top-8 right-10 flex-col items-center gap-2 z-10">
+          <Logomark size={56} />
+          <div className="text-center">
+            <div className="font-bold text-sm text-[var(--text-primary)] leading-none">
+              ProcureTech<span className="text-[var(--brand-blue)]">+</span>
+            </div>
+            <div className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-wider mt-0.5">
+              AI Procurement OS
+            </div>
+          </div>
+        </div>
+
         <div className="w-full max-w-md relative z-10">
 
-          {/* Header row: heading on left, logo on far right */}
-          <div className="flex items-start justify-between gap-4 mb-8">
-            <div>
-              {/* Mobile-only logo (shown when left panel is hidden) */}
-              <div className="lg:hidden flex items-center gap-2.5 mb-4">
-                <Logomark size={32} />
-                <div className="font-bold text-[var(--text-primary)]">
-                  ProcureTech<span className="text-[var(--brand-blue)]">+</span>
-                </div>
-              </div>
-              <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-1">Sign in to your workspace</h1>
-              <p className="text-sm text-[var(--text-secondary)]">Select a demo persona to explore the platform.</p>
+          {/* Mobile-only logo */}
+          <div className="lg:hidden flex items-center gap-2.5 mb-6">
+            <Logomark size={32} />
+            <div className="font-bold text-[var(--text-primary)]">
+              ProcureTech<span className="text-[var(--brand-blue)]">+</span>
             </div>
+          </div>
 
-            {/* Logo — far right, desktop only */}
-            <div className="hidden lg:flex flex-col items-center gap-1.5 shrink-0 pt-1">
-              <Logomark size={52} />
-              <div className="text-center">
-                <div className="font-bold text-sm text-[var(--text-primary)] leading-none">
-                  ProcureTech<span className="text-[var(--brand-blue)]">+</span>
-                </div>
-                <div className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-wider mt-0.5">
-                  AI Procurement OS
-                </div>
-              </div>
-            </div>
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-1">Sign in to your workspace</h1>
+            <p className="text-sm text-[var(--text-secondary)]">Select a demo persona to explore the platform.</p>
           </div>
 
           {/* Role list */}
