@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
+import { Logomark } from '@/components/logomark';
 
 export default function RootPage() {
   const { user, isLoading } = useAuth();
@@ -18,9 +19,7 @@ export default function RootPage() {
   return (
     <div className="flex h-screen items-center justify-center bg-[#FAFAFA]">
       <div className="flex flex-col items-center gap-4">
-        <div className="w-12 h-12 rounded-xl bg-[#1A56DB] flex items-center justify-center shadow-lg">
-          <span className="text-white font-bold text-xl">P</span>
-        </div>
+        <Logomark size={48} />
         <div className="flex flex-col items-center gap-1">
           <p className="text-sm font-semibold text-gray-800">
             ProcureTech<span className="text-[#1A56DB]">+</span>

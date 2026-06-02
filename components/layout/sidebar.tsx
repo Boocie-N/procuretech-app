@@ -8,6 +8,7 @@ import {
   LogOut, Building2, ListChecks, CheckSquare, Inbox, History,
   FolderOpen, UserCircle, AlertTriangle,
 } from 'lucide-react';
+import { Logomark } from '@/components/logomark';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/lib/auth-context';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -98,9 +99,7 @@ export function Sidebar() {
         {/* Logo */}
         <div className="px-5 py-4 border-b border-[var(--border-default)] shrink-0">
           <Link href={homeHref} className="flex items-center gap-2.5">
-            <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center shrink-0', isSupplier ? 'bg-emerald-600' : 'bg-[var(--brand-blue)]')}>
-              <span className="text-white font-bold text-sm">P</span>
-            </div>
+            <Logomark size={32} />
             <div>
               <div className="font-bold text-[var(--text-primary)] text-sm leading-none">
                 ProcureTech<span className={isSupplier ? 'text-emerald-600' : 'text-[var(--brand-blue)]'}>+</span>

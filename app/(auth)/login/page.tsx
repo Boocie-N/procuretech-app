@@ -9,6 +9,7 @@ import type { UserRole } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { Logomark } from '@/components/logomark';
 import {
   ShieldCheck, Users, TrendingUp, Bot, Link2, BookOpen,
   ArrowRight, CheckCircle2, Building2,
@@ -86,9 +87,7 @@ export default function LoginPage() {
         <div className="relative z-10 flex flex-col h-full">
           {/* Logo */}
           <div className="flex items-center gap-3 mb-12">
-            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
-              <span className="text-white font-bold text-lg">P</span>
-            </div>
+            <Logomark size={40} />
             <div>
               <div className="font-bold text-xl leading-none">ProcureTech<span className="opacity-60">+</span></div>
               <div className="text-xs text-blue-200 mt-0.5 uppercase tracking-wider">AI Procurement OS</div>
@@ -133,9 +132,7 @@ export default function LoginPage() {
 
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-2 mb-8">
-            <div className="w-8 h-8 rounded-lg bg-[var(--brand-blue)] flex items-center justify-center">
-              <span className="text-white font-bold text-sm">P</span>
-            </div>
+            <Logomark size={32} />
             <div className="font-bold text-[var(--text-primary)]">ProcureTech<span className="text-[var(--brand-blue)]">+</span></div>
           </div>
 

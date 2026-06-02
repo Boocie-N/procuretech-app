@@ -14,6 +14,7 @@ import {
   ArrowRight, ArrowLeft, Upload, Shield, Info, AlertCircle
 } from 'lucide-react';
 import Link from 'next/link';
+import { Logomark } from '@/components/logomark';
 
 const STEPS = [
   { id: 1, label: 'Company Info',   icon: Building2 },
@@ -191,9 +192,7 @@ export default function SupplierRegisterPage() {
       <header className="bg-white border-b border-[var(--border-default)] px-6 py-4">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[var(--brand-blue)] flex items-center justify-center">
-              <span className="text-white font-bold text-sm">P</span>
-            </div>
+            <Logomark size={32} />
             <div>
               <div className="font-bold text-sm text-[var(--text-primary)]">ProcureTech<span className="text-[var(--brand-blue)]">+</span></div>
               <div className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-wider">Supplier Registration</div>

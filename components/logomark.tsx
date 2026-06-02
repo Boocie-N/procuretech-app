@@ -1,0 +1,42 @@
+import { cn } from '@/lib/utils';
+
+interface LogomarkProps {
+  /** Rendered size (width = height). Default 32px. */
+  size?: number;
+  className?: string;
+}
+
+/**
+ * ProcureTech+ SVG logomark.
+ * Drop-in replacement for the "P" placeholder everywhere in the app.
+ */
+export function Logomark({ size = 32, className }: LogomarkProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 188 191"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn('shrink-0', className)}
+      aria-label="ProcureTech+ logomark"
+    >
+      <path
+        d="M76.8252 0.705078L186.825 94.7051L187.27 95.085H187.854L187.562 95.335L187.854 95.585H187.27L186.825 95.9648L76.8252 189.965L76 190.67V137.361L76.167 137.212L123.029 95.335L76.167 53.458L76 53.3086V0L76.8252 0.705078Z"
+        fill="url(#pt_grad)"
+      />
+      <path
+        d="M71.9412 137.959C64.479 142.079 56.0628 144.159 47.5406 143.991C39.0183 143.822 30.691 141.41 23.3977 136.998C16.1043 132.587 10.1024 126.331 5.99675 118.861C1.89108 111.391 -0.173363 102.971 0.0113944 94.4488C0.196152 85.9268 2.62359 77.6041 7.04915 70.3191C11.4747 63.0341 17.7421 57.0441 25.2198 52.9526C32.6975 48.8611 41.1215 46.8126 49.6431 47.0135C58.1646 47.2144 66.4827 49.6576 73.7593 54.0969L62.0747 73.2495C58.1641 70.8637 53.6939 69.5507 49.1143 69.4428C44.5347 69.3348 40.0076 70.4357 35.9889 72.6345C31.9703 74.8333 28.6022 78.0524 26.2238 81.9675C23.8455 85.8825 22.5409 90.3553 22.4416 94.935C22.3423 99.5148 23.4518 104.04 25.6582 108.054C27.8647 112.069 31.0901 115.431 35.0097 117.802C38.9293 120.173 43.4044 121.469 47.9844 121.559C52.5643 121.65 57.0873 120.532 61.0976 118.318L71.9412 137.959Z"
+        fill="#011936"
+      />
+      <circle cx="48.5" cy="95.5" r="14.5" fill="#18BBA8" />
+      <defs>
+        <linearGradient id="pt_grad" x1="132" y1="2.5" x2="132" y2="197" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#019F8C" />
+          <stop offset="0.487749" stopColor="#015163" />
+          <stop offset="0.916629" stopColor="#019F8C" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}

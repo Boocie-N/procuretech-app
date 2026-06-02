@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
+import { Logomark } from '@/components/logomark';
 import { Sidebar } from '@/components/layout/sidebar';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -44,8 +45,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     return (
       <div className="flex h-screen items-center justify-center bg-[#FAFAFA]">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#1A56DB] flex items-center justify-center animate-pulse">
-            <span className="text-white font-bold text-sm">P</span>
+          <div className="animate-pulse">
+            <Logomark size={32} />
           </div>
           <p className="text-xs text-gray-400">Redirecting…</p>
         </div>
