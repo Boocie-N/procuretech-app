@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import type { User, UserRole } from '@/types';
-import { DEMO_USERS } from '@/lib/demo-data';
+import { getUsers } from '@/lib/users-store';
 
 interface AuthContextType {
   user: User | null;
@@ -77,7 +77,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   function login(userId: string) {
-    const found = DEMO_USERS.find(u => u.id === userId);
+    const found = getUsers().find(u => u.id === userId);
     if (found) {
       setUser(found);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(found));

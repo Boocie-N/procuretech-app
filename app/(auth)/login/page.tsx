@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
-import { DEMO_USERS } from '@/lib/demo-data';
+import { useUsers } from '@/lib/use-users';
 import { ROLE_LABELS } from '@/lib/utils';
 import type { UserRole } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -163,6 +163,7 @@ function ProcurementGraphic() {
 export default function LoginPage() {
   const [selected, setSelected] = useState<string | null>(null);
   const { login, user, isLoading } = useAuth();
+  const { users } = useUsers();
   const router = useRouter();
 
   useEffect(() => {
@@ -174,7 +175,7 @@ export default function LoginPage() {
   function handleEnter() {
     if (!selected) return;
     login(selected);
-    const selectedUser = DEMO_USERS.find(u => u.id === selected);
+    const selectedUser = users.find(u => u.id === selected);
     router.push(selectedUser?.role === 'supplier' ? '/supplier-portal' : '/dashboard');
   }
 
@@ -324,7 +325,7 @@ export default function LoginPage() {
 
           {/* Role list */}
           <div className="space-y-2 mb-6">
-            {DEMO_USERS.map(u => {
+            {users.map(u => {
               const meta = ROLE_META[u.role];
               const initials = u.full_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
               const isSelected = selected === u.id;

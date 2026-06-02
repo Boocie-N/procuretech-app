@@ -10,15 +10,38 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
+} from '@/components/ui/dialog';
 import { useAuth } from '@/lib/auth-context';
 import { useTheme } from '@/components/layout/theme-provider';
+import { useUsers } from '@/lib/use-users';
 import { ROLE_LABELS } from '@/lib/utils';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import type { UserRole } from '@/types';
 import {
   User, Building2, Bell, Shield, Workflow, Moon, Sun,
-  Save, Upload, ChevronRight, Check,
+  Save, Upload, ChevronRight, Check, Users, UserPlus, Trash2,
 } from 'lucide-react';
+
+const ROLE_BADGE_COLORS: Record<UserRole, string> = {
+  admin:               'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300',
+  procurement_officer: 'bg-blue-100   text-blue-700   dark:bg-blue-900/30   dark:text-blue-300',
+  manager:             'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300',
+  cfo:                 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
+  legal:               'bg-amber-100  text-amber-700  dark:bg-amber-900/30  dark:text-amber-300',
+  supplier:            'bg-teal-100   text-teal-700   dark:bg-teal-900/30   dark:text-teal-300',
+};
+
+const ROLE_AVATAR_COLORS: Record<UserRole, string> = {
+  admin:               'bg-violet-600',
+  procurement_officer: 'bg-[#1A56DB]',
+  manager:             'bg-indigo-600',
+  cfo:                 'bg-emerald-600',
+  legal:               'bg-amber-500',
+  supplier:            'bg-teal-600',
+};
 
 const APPROVAL_CHAIN = [
   { step: 1, role: 'Procurement Officer', threshold: 'All procurements',      can_approve: false },
@@ -51,6 +74,42 @@ const SUPPLIER_NOTIFICATION_SETTINGS = [
 export default function SettingsPage() {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { users, addUser, removeUser } = useUsers();
+
+  const isAdmin = user?.role === 'admin';
+
+  // ── Add-user modal state ───────────────────────────────────────────────────
+  const [addOpen, setAddOpen] = useState(false);
+  const [newUser, setNewUser] = useState({ full_name: '', email: '', role: 'procurement_officer' as UserRole });
+  const [addError, setAddError] = useState('');
+  const [confirmRemoveId, setConfirmRemoveId] = useState<string | null>(null);
+
+  function handleAddUser() {
+    if (!newUser.full_name.trim()) { setAddError('Full name is required.'); return; }
+    if (!newUser.email.trim() || !newUser.email.includes('@')) { setAddError('A valid email is required.'); return; }
+    if (users.some(u => u.email.toLowerCase() === newUser.email.toLowerCase())) {
+      setAddError('A user with this email already exists.'); return;
+    }
+    addUser({
+      id: `u_${Date.now()}`,
+      full_name: newUser.full_name.trim(),
+      email: newUser.email.trim().toLowerCase(),
+      role: newUser.role,
+      organisation_id: 'org1',
+      created_at: new Date().toISOString(),
+    });
+    toast.success(`${newUser.full_name} added successfully`);
+    setNewUser({ full_name: '', email: '', role: 'procurement_officer' });
+    setAddError('');
+    setAddOpen(false);
+  }
+
+  function handleRemoveUser(id: string) {
+    const target = users.find(u => u.id === id);
+    removeUser(id);
+    toast.success(`${target?.full_name ?? 'User'} removed`);
+    setConfirmRemoveId(null);
+  }
 
   const [profile, setProfile] = useState({
     full_name: user?.full_name ?? '',
@@ -74,6 +133,7 @@ export default function SettingsPage() {
   });
 
   const isSupplier = user?.role === 'supplier';
+  const adminCount = users.filter(u => u.role === 'admin').length;
   const [notifs, setNotifs] = useState(
     isSupplier ? SUPPLIER_NOTIFICATION_SETTINGS : NOTIFICATION_SETTINGS
   );
@@ -98,6 +158,7 @@ export default function SettingsPage() {
             {!isSupplier && <TabsTrigger value="org"      className="gap-1.5"><Building2 className="w-3.5 h-3.5" /> Organisation</TabsTrigger>}
             <TabsTrigger value="notifs"   className="gap-1.5"><Bell className="w-3.5 h-3.5" /> Notifications</TabsTrigger>
             {!isSupplier && <TabsTrigger value="workflow" className="gap-1.5"><Workflow className="w-3.5 h-3.5" /> Approvals</TabsTrigger>}
+            {isAdmin      && <TabsTrigger value="users"    className="gap-1.5"><Users className="w-3.5 h-3.5" /> Users</TabsTrigger>}
             <TabsTrigger value="security" className="gap-1.5"><Shield className="w-3.5 h-3.5" /> Security</TabsTrigger>
           </TabsList>
 
@@ -321,6 +382,154 @@ export default function SettingsPage() {
               </div>
             </div>
           </TabsContent>
+
+          {/* ── Users (admin only) ── */}
+          {isAdmin && (
+            <TabsContent value="users">
+              <div className="bg-white dark:bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] shadow-sm overflow-hidden">
+                {/* Header */}
+                <div className="px-6 py-4 border-b border-[var(--border-default)] flex items-center justify-between">
+                  <div>
+                    <h3 className="text-sm font-semibold text-[var(--text-primary)]">Organisation Users</h3>
+                    <p className="text-xs text-[var(--text-tertiary)] mt-0.5">{users.length} user{users.length !== 1 ? 's' : ''} in your organisation</p>
+                  </div>
+                  <Button
+                    size="sm"
+                    className="bg-[var(--brand-blue)] hover:bg-[var(--brand-blue-dark)] text-white gap-1.5 text-xs h-8"
+                    onClick={() => { setAddError(''); setAddOpen(true); }}
+                  >
+                    <UserPlus className="w-3.5 h-3.5" /> Add User
+                  </Button>
+                </div>
+
+                {/* Column headers */}
+                <div className="px-6 py-2.5 border-b border-[var(--border-default)] grid grid-cols-[1fr_1.5fr_1fr_auto] gap-4 items-center">
+                  <span className="text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Name</span>
+                  <span className="text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Email</span>
+                  <span className="text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Role</span>
+                  <span className="text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">Action</span>
+                </div>
+
+                {/* User rows */}
+                <div className="divide-y divide-[var(--border-default)]">
+                  {users.map(u => {
+                    const initials = u.full_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+                    const isSelf = u.id === user?.id;
+                    const isLastAdmin = u.role === 'admin' && adminCount <= 1;
+                    const canRemove = !isSelf && !isLastAdmin;
+                    return (
+                      <div key={u.id} className="px-6 py-3 grid grid-cols-[1fr_1.5fr_1fr_auto] gap-4 items-center hover:bg-gray-50 dark:hover:bg-white/5">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className={cn('w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0', ROLE_AVATAR_COLORS[u.role])}>
+                            {initials}
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-sm font-medium text-[var(--text-primary)] truncate">{u.full_name}</div>
+                            {isSelf && <div className="text-[10px] text-[var(--text-tertiary)]">You</div>}
+                          </div>
+                        </div>
+                        <div className="text-sm text-[var(--text-secondary)] truncate">{u.email}</div>
+                        <div>
+                          <span className={cn('text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full', ROLE_BADGE_COLORS[u.role])}>
+                            {ROLE_LABELS[u.role]}
+                          </span>
+                        </div>
+                        <div>
+                          {canRemove ? (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-7 text-xs text-red-500 border-red-200 hover:bg-red-50 dark:hover:bg-red-900/20 gap-1"
+                              onClick={() => setConfirmRemoveId(u.id)}
+                            >
+                              <Trash2 className="w-3 h-3" /> Remove
+                            </Button>
+                          ) : (
+                            <span className="text-[10px] text-[var(--text-tertiary)]">
+                              {isSelf ? 'Current user' : 'Last admin'}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Add User dialog */}
+              <Dialog open={addOpen} onOpenChange={setAddOpen}>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Add New User</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 py-2">
+                    <div className="space-y-1.5">
+                      <Label>Full Name</Label>
+                      <Input
+                        placeholder="e.g. Lerato Nkosi"
+                        value={newUser.full_name}
+                        onChange={e => setNewUser(p => ({ ...p, full_name: e.target.value }))}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>Email Address</Label>
+                      <Input
+                        type="email"
+                        placeholder="e.g. lerato@procuretech.co.za"
+                        value={newUser.email}
+                        onChange={e => setNewUser(p => ({ ...p, email: e.target.value }))}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>Role</Label>
+                      <select
+                        className="w-full border border-[var(--border-default)] rounded-lg px-3 py-2 text-sm bg-white dark:bg-[var(--bg-surface)]"
+                        value={newUser.role}
+                        onChange={e => setNewUser(p => ({ ...p, role: e.target.value as UserRole }))}
+                      >
+                        {(Object.keys(ROLE_LABELS) as UserRole[]).map(r => (
+                          <option key={r} value={r}>{ROLE_LABELS[r]}</option>
+                        ))}
+                      </select>
+                    </div>
+                    {addError && <p className="text-xs text-red-500">{addError}</p>}
+                  </div>
+                  <DialogFooter className="gap-2">
+                    <Button variant="outline" onClick={() => setAddOpen(false)}>Cancel</Button>
+                    <Button
+                      className="bg-[var(--brand-blue)] hover:bg-[var(--brand-blue-dark)] text-white gap-1.5"
+                      onClick={handleAddUser}
+                    >
+                      <UserPlus className="w-4 h-4" /> Add User
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
+              {/* Confirm Remove dialog */}
+              <Dialog open={!!confirmRemoveId} onOpenChange={() => setConfirmRemoveId(null)}>
+                <DialogContent className="sm:max-w-sm">
+                  <DialogHeader>
+                    <DialogTitle>Remove User</DialogTitle>
+                  </DialogHeader>
+                  <p className="text-sm text-[var(--text-secondary)] py-2">
+                    Are you sure you want to remove{' '}
+                    <strong>{users.find(u => u.id === confirmRemoveId)?.full_name}</strong>?
+                    They will no longer be able to sign in.
+                  </p>
+                  <DialogFooter className="gap-2">
+                    <Button variant="outline" onClick={() => setConfirmRemoveId(null)}>Cancel</Button>
+                    <Button
+                      className="bg-red-600 hover:bg-red-700 text-white gap-1.5"
+                      onClick={() => confirmRemoveId && handleRemoveUser(confirmRemoveId)}
+                    >
+                      <Trash2 className="w-4 h-4" /> Remove User
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </TabsContent>
+          )}
 
           {/* ── Security ── */}
           <TabsContent value="security">
