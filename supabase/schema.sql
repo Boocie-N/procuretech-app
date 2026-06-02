@@ -67,7 +67,7 @@ create table suppliers (
   years_in_operation    int,
   annual_turnover_band  text,
   max_contract_value    numeric,
-  references            jsonb default '[]',
+  client_references     jsonb default '[]',
   status                text default 'pending' check (status in ('pending','approved','conditional','rejected','suspended')),
   grade_total           int,
   grade_letter          text,
