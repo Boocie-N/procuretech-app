@@ -38,6 +38,16 @@ const NOTIFICATION_SETTINGS = [
   { id: 'po_issued',      label: 'Purchase order issued',             email: true,  inApp: true  },
 ];
 
+const SUPPLIER_NOTIFICATION_SETTINGS = [
+  { id: 'rfq_invite',     label: 'RFQ invitation received',           email: true,  inApp: true  },
+  { id: 'rfq_closing',    label: 'RFQ closing reminder (48 hrs)',     email: true,  inApp: true  },
+  { id: 'bid_outcome',    label: 'Bid outcome (recommended/awarded)',  email: true,  inApp: true  },
+  { id: 'po_issued',      label: 'Purchase order issued to me',       email: true,  inApp: true  },
+  { id: 'doc_expiry',     label: 'Document expiring within 60 days',  email: true,  inApp: true  },
+  { id: 'grade_change',   label: 'Supplier grade updated',            email: false, inApp: true  },
+  { id: 'payment',        label: 'Payment / remittance advice',       email: true,  inApp: false },
+];
+
 export default function SettingsPage() {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
@@ -63,7 +73,10 @@ export default function SettingsPage() {
     min_quotes: '3',
   });
 
-  const [notifs, setNotifs] = useState(NOTIFICATION_SETTINGS);
+  const isSupplier = user?.role === 'supplier';
+  const [notifs, setNotifs] = useState(
+    isSupplier ? SUPPLIER_NOTIFICATION_SETTINGS : NOTIFICATION_SETTINGS
+  );
 
   const initials = user?.full_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() ?? 'U';
 
@@ -73,16 +86,19 @@ export default function SettingsPage() {
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden">
-      <Topbar title="Settings" subtitle="Profile, organisation, notifications and platform configuration" />
+      <Topbar
+        title="Settings"
+        subtitle={isSupplier ? 'Notification preferences and account security' : 'Profile, organisation, notifications and platform configuration'}
+      />
 
       <div className="flex-1 overflow-y-auto p-6">
-        <Tabs defaultValue="profile" className="max-w-3xl">
+        <Tabs defaultValue={isSupplier ? 'notifs' : 'profile'} className="max-w-3xl">
           <TabsList className="mb-6">
-            <TabsTrigger value="profile" className="gap-1.5"><User className="w-3.5 h-3.5" /> Profile</TabsTrigger>
-            <TabsTrigger value="org"     className="gap-1.5"><Building2 className="w-3.5 h-3.5" /> Organisation</TabsTrigger>
-            <TabsTrigger value="notifs"  className="gap-1.5"><Bell className="w-3.5 h-3.5" /> Notifications</TabsTrigger>
-            <TabsTrigger value="workflow"className="gap-1.5"><Workflow className="w-3.5 h-3.5" /> Approvals</TabsTrigger>
-            <TabsTrigger value="security"className="gap-1.5"><Shield className="w-3.5 h-3.5" /> Security</TabsTrigger>
+            {!isSupplier && <TabsTrigger value="profile"  className="gap-1.5"><User className="w-3.5 h-3.5" /> Profile</TabsTrigger>}
+            {!isSupplier && <TabsTrigger value="org"      className="gap-1.5"><Building2 className="w-3.5 h-3.5" /> Organisation</TabsTrigger>}
+            <TabsTrigger value="notifs"   className="gap-1.5"><Bell className="w-3.5 h-3.5" /> Notifications</TabsTrigger>
+            {!isSupplier && <TabsTrigger value="workflow" className="gap-1.5"><Workflow className="w-3.5 h-3.5" /> Approvals</TabsTrigger>}
+            <TabsTrigger value="security" className="gap-1.5"><Shield className="w-3.5 h-3.5" /> Security</TabsTrigger>
           </TabsList>
 
           {/* ── Profile ── */}
