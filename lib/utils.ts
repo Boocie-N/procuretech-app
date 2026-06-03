@@ -66,16 +66,16 @@ export function getStatusColor(status: ProcurementStatus): string {
 
 // ─── CIPS Stages ──────────────────────────────────────────────────────────────
 export const CIPS_STAGES: { id: CIPSStage; label: string; description: string }[] = [
-  { id: 'identify_need',       label: 'Identify Need',         description: 'Define requirement, confirm budget, get approval to proceed' },
-  { id: 'specify',             label: 'Specify',               description: 'Draft SOW, TOR, technical specifications' },
-  { id: 'market_intelligence', label: 'Market Intelligence',   description: 'AI price benchmarking, supplier landscape, OEM analysis' },
-  { id: 'strategy',            label: 'Procurement Strategy',  description: 'Choose approach: RFQ, RFP, tender, or sole source' },
-  { id: 'source',              label: 'Source',                description: 'Invite suppliers, issue RFQ/RFP/Tender documents' },
-  { id: 'assess',              label: 'Assess',                description: 'Evaluate bids — price, BBBEE, technical, delivery' },
-  { id: 'recommend',           label: 'Recommend',             description: 'AI-assisted recommendation report, review & edit' },
-  { id: 'approve',             label: 'Approve',               description: 'Approval workflow: Officer → Manager → CFO → Legal' },
-  { id: 'contract',            label: 'Contract & Award',      description: 'Issue PO or contract, notify suppliers' },
-  { id: 'deliver_review',      label: 'Deliver & Review',      description: 'Delivery confirmation, performance rating, lessons learned' },
+  { id: 'identify_need',       label: 'Identify Need',   description: 'Define the requirement, confirm budget and get approval to proceed' },
+  { id: 'specify',             label: 'Specify',         description: 'Draft the Scope of Work, TOR and technical specifications' },
+  { id: 'market_intelligence', label: 'Market Intel',    description: 'AI price benchmarking, supplier landscape analysis and OEM comparison' },
+  { id: 'strategy',            label: 'Strategy',        description: 'Choose procurement approach: RFQ, RFP, tender or sole source' },
+  { id: 'source',              label: 'Source Bids',     description: 'Invite suppliers and issue RFQ / RFP / Tender documents' },
+  { id: 'assess',              label: 'Assess Bids',     description: 'Evaluate received bids on price, BBBEE, technical compliance and delivery' },
+  { id: 'recommend',           label: 'AI Evaluation',   description: 'AI-assisted recommendation report — review, edit and finalise' },
+  { id: 'approve',             label: 'Approve',         description: 'Approval workflow: Officer → Manager → CFO → Legal sign-off' },
+  { id: 'contract',            label: 'Contract',        description: 'Issue purchase order or contract and notify all suppliers' },
+  { id: 'deliver_review',      label: 'Deliver',         description: 'Delivery confirmation, supplier performance rating and lessons learned' },
 ];
 export function getStageIndex(stage: CIPSStage): number {
   return CIPS_STAGES.findIndex(s => s.id === stage);

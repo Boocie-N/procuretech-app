@@ -44,6 +44,96 @@ export const DEMO_PROCUREMENTS: Procurement[] = [
       { step: 3, role: 'cfo',                 role_label: 'CFO',                 status: 'pending' },
       { step: 4, role: 'legal',               role_label: 'Legal',               status: 'pending' },
     ],
+    sow: `SCOPE OF WORK — 500× LAPTOP COMPUTERS
+Reference: RFQ/PT/2025/048 | Date: 15 January 2025
+
+1. BACKGROUND
+The organisation requires 500 laptop computers to replace end-of-life desktop units and support the digital transformation initiative across Johannesburg offices. Current hardware is beyond its 5-year refresh cycle and no longer supported under warranty.
+
+2. OBJECTIVES
+• Replace 500 end-of-life units with enterprise-grade, portable laptops
+• Ensure full BBBEE-compliant procurement (Level 1–4 preferred)
+• Complete delivery and asset tagging within 21 calendar days of PO issuance
+
+3. TECHNICAL SPECIFICATIONS
+• Processor: Intel Core i7 (13th Gen or later) or AMD Ryzen 7 equivalent
+• RAM: 16GB DDR4 minimum (upgradeable to 32GB)
+• Storage: 512GB NVMe SSD minimum
+• Display: 14"–15.6", Full HD (1920×1080), IPS anti-glare
+• Operating System: Windows 11 Pro (fully licensed)
+• Connectivity: Wi-Fi 6, Bluetooth 5.0, USB-C (Thunderbolt 4), HDMI 2.0, USB-A ×2
+• Battery: Minimum 8-hour rated battery life
+• Warranty: 3-year on-site, next-business-day response
+
+4. DELIVERY REQUIREMENTS
+• Location: Johannesburg CBD offices (address provided on PO)
+• Timeframe: Within 21 calendar days of purchase order
+• Packaging: Individual retail boxes; serial numbers pre-recorded on delivery note
+• Configuration: All units pre-imaged with Windows 11 Pro and standard software suite
+
+5. COMPLIANCE REQUIREMENTS
+• Supplier: BBBEE Level 1–4 (valid certificate required)
+• Valid SARS Tax Compliance Status (Good Standing)
+• CIPC company registration — current and in good standing
+• VAT-registered vendor
+• ISO 9001 or equivalent quality management certification preferred`,
+
+    rfq_document: `REQUEST FOR QUOTATION
+Reference: RFQ/PT/2025/048
+Date of Issue: 15 January 2025
+Closing Date & Time: 7 February 2025 at 16:00 (SAST)
+
+PROCURING ENTITY
+ProcureTech+ Demo Organisation
+1 Maude Street, Sandton, Johannesburg, 2196
+Contact: Thabo Mokoena | thabo@procuretech.co.za | 011 000 0001
+
+ITEM DESCRIPTION
+500 (five hundred) enterprise-grade laptop computers as per technical specification below.
+
+TECHNICAL SPECIFICATION
+• Processor: Intel Core i7 13th Gen or equivalent (min. 4.0GHz boost)
+• RAM: 16GB DDR4
+• Storage: 512GB NVMe SSD
+• Display: 14"–15.6" Full HD IPS anti-glare
+• OS: Windows 11 Pro (licensed)
+• Warranty: 3-year on-site NBD
+
+EVALUATION CRITERIA (PPPFA 90/10)
+• Price: 40 points
+• BBBEE Status Level Contribution: 20 points
+• Delivery period: 20 points
+• Technical compliance: 20 points
+
+BBBEE REQUIREMENT
+Preference will be given to BBBEE Level 1–4 suppliers. Certificate must be valid at closing date.
+
+SUBMISSION REQUIREMENTS
+Quotations must be submitted electronically to thabo@procuretech.co.za before closing date.
+Include: Itemised pricing (excl. VAT), BBBEE certificate, Tax clearance, CIPC certificate, technical spec sheet.
+
+TERMS
+• Prices must be valid for 60 days from closing date
+• Delivery: Johannesburg CBD within 21 days of PO
+• Payment: 30 days from delivery and acceptance
+• The procuring entity reserves the right to accept or reject any quotation`,
+
+    market_analysis: {
+      category: 'it_equipment',
+      item_description: '500× Enterprise Laptops — Core i7, 16GB RAM, 512GB SSD, Windows 11 Pro',
+      price_min: 2_150,
+      price_max: 2_650,
+      price_median: 2_400,
+      price_trend: 'rising',
+      trend_pct: 4.2,
+      currency: 'ZAR',
+      recommended_suppliers: ['Mecer IT Solutions (L1)', 'AfriTech Supply Co (L2)', 'iStore Business (L2)', 'Rectron SA (L2)', 'Pinnacle Micro (L3)'],
+      oems_and_manufacturers: ['Dell Technologies', 'Lenovo', 'HP Inc.', 'Acer', 'ASUS'],
+      market_notes: 'Global component shortages are easing but rand weakness (+4.2% YoY) is pushing import costs up. BBBEE Level 1–2 distributors currently carry limited stock at slight premium. Dell Latitude and Lenovo ThinkPad remain preferred enterprise choices with local warranty support. Recommend locking in pricing early — Q1 2025 price increases of 3–5% expected from major OEMs. Budget of R2,400/unit is well-positioned; negotiation to R2,250–R2,350 is realistic for confirmed volume.',
+      analysed_at: '2025-01-14T09:00:00Z',
+      source: 'ai',
+    },
+
     created_at: '2025-01-15T09:00:00Z',
     updated_at: '2025-01-22T14:30:00Z',
   },
@@ -130,6 +220,41 @@ export const DEMO_PROCUREMENTS: Procurement[] = [
       { step: 3, role: 'cfo',                 role_label: 'CFO',                 status: 'approved', approved_by: 'u3', approved_by_name: 'Sipho Khumalo',  actioned_at: '2024-12-23T09:00:00Z' },
       { step: 4, role: 'legal',               role_label: 'Legal',               status: 'approved', approved_by: 'u5', approved_by_name: 'Zanele Motha',   actioned_at: '2024-12-24T14:00:00Z' },
     ],
+    sow: `SCOPE OF WORK — SECURITY SERVICES (24/7 SANDTON COMPLEX)
+Reference: RFQ/PT/2025/046 | Date: 15 December 2024
+
+1. BACKGROUND
+The organisation requires armed security services for 24/7 coverage of its Sandton office complex following an increase in security incidents in the area.
+
+2. SCOPE
+• 3 (three) armed security officers on-site at all times (24/7, 365 days)
+• Armed response on-call within 5 minutes
+• Monthly incident reports and daily handover logs
+• Access control management at main entrance
+
+3. COMPLIANCE REQUIREMENTS
+• All guards: PSIRA registered, Grade C minimum
+• Company: PSIRA-registered security service provider
+• BBBEE Level 1–4 preferred
+• Public liability insurance: Minimum R10,000,000
+• Valid SARS Tax Compliance Status`,
+
+    market_analysis: {
+      category: 'security',
+      item_description: '3× Armed Security Officers, 24/7 Coverage, Sandton Complex — 12-month contract',
+      price_min: 480_000,
+      price_max: 660_000,
+      price_median: 560_000,
+      price_trend: 'rising',
+      trend_pct: 6.8,
+      currency: 'ZAR',
+      recommended_suppliers: ['Ndalo Security Services (L2)', 'G4S South Africa (L3)', 'Fidelity Security (L4)', 'ADT Business (L3)'],
+      oems_and_manufacturers: ['N/A — Service industry'],
+      market_notes: 'Security services in Gauteng are tracking 6–8% price increases YoY driven by minimum wage adjustments and PSIRA registration costs. 24/7 armed guarding with armed response ranges R480k–R660k annually for a 3-guard post. BBBEE Level 1–2 providers are limited in this segment — Level 2–3 is more realistic. Recommend requiring PSIRA certificate and public liability insurance as hard compliance gates.',
+      analysed_at: '2024-12-14T09:00:00Z',
+      source: 'ai',
+    },
+
     created_at: '2024-12-15T09:00:00Z',
     updated_at: '2025-01-01T08:00:00Z',
   },
