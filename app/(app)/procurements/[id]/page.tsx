@@ -1,6 +1,6 @@
 'use client';
 
-import { use } from 'react';
+import { use, useRef } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, CheckCircle, Clock, XCircle, Bot, FileText, Shield, MapPin, Calendar, Tag, Building2, TrendingUp } from 'lucide-react';
 import { Topbar } from '@/components/layout/topbar';
@@ -143,6 +143,19 @@ export default function ProcurementDetailPage({ params }: { params: Promise<{ id
   const stageIdx = getStageIndex(procurement.current_stage);
   const recommendedBid = bids.find((b) => b.recommendation === 'recommended');
 
+  // Scroll refs for each section
+  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  function scrollToStage(stageId: string) {
+    const el = sectionRefs.current[stageId];
+    const container = scrollAreaRef.current;
+    if (el && container) {
+      const top = el.offsetTop - 16;
+      container.scrollTo({ top, behavior: 'smooth' });
+    }
+  }
+
   return (
     <div className="flex flex-col h-full">
       <Topbar
@@ -158,38 +171,42 @@ export default function ProcurementDetailPage({ params }: { params: Promise<{ id
         }
       />
 
-      <div className="flex-1 overflow-auto p-6">
+      <div className="flex-1 overflow-auto p-6" ref={scrollAreaRef}>
         <div className="flex gap-6 max-w-7xl mx-auto">
           {/* Left — 2/3 */}
           <div className="flex-1 space-y-5 min-w-0">
 
             {/* CIPS Stage stepper */}
             <div className="bg-white border border-[var(--border-default)] rounded-xl shadow-sm p-5">
-              <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-4">CIPS Procurement Cycle</h2>
+              <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-4">CIPS Procurement Cycle — click a stage to jump to it</h2>
               <div className="flex items-center gap-0">
                 {CIPS_STAGES.map((stage, idx) => {
                   const isCompleted = idx < stageIdx;
                   const isCurrent = idx === stageIdx;
-                  const isFuture = idx > stageIdx;
                   return (
                     <div key={stage.id} className="flex items-center flex-1">
                       <div className="flex flex-col items-center gap-1 flex-1">
-                        <div
-                          className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
+                        <button
+                          onClick={() => scrollToStage(stage.id)}
+                          title={stage.description}
+                          className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all cursor-pointer hover:scale-110 hover:shadow-md ${
                             isCompleted ? 'bg-[var(--brand-blue)] text-white' :
                             isCurrent ? 'bg-[var(--brand-blue)] text-white ring-4 ring-blue-100' :
-                            'bg-gray-100 text-gray-400'
+                            'bg-gray-100 text-gray-400 hover:bg-gray-200'
                           }`}
                         >
                           {isCompleted ? <CheckCircle className="w-4 h-4" /> : idx + 1}
-                        </div>
-                        <span className={`text-center leading-tight text-[10px] w-14 ${
-                          isCurrent ? 'text-[var(--brand-blue)] font-semibold' :
-                          isCompleted ? 'text-[var(--text-secondary)]' :
-                          'text-[var(--text-tertiary)]'
-                        }`}>
+                        </button>
+                        <button
+                          onClick={() => scrollToStage(stage.id)}
+                          className={`text-center leading-tight text-[10px] w-14 cursor-pointer hover:underline bg-transparent border-0 p-0 ${
+                            isCurrent ? 'text-[var(--brand-blue)] font-semibold' :
+                            isCompleted ? 'text-[var(--text-secondary)]' :
+                            'text-[var(--text-tertiary)]'
+                          }`}
+                        >
                           {stage.label}
-                        </span>
+                        </button>
                       </div>
                       {idx < CIPS_STAGES.length - 1 && (
                         <div className={`h-0.5 flex-1 mt-[-18px] ${idx < stageIdx ? 'bg-[var(--brand-blue)]' : 'bg-gray-200'}`} />
@@ -206,7 +223,10 @@ export default function ProcurementDetailPage({ params }: { params: Promise<{ id
             </div>
 
             {/* Procurement Details */}
-            <div className="bg-white border border-[var(--border-default)] rounded-xl shadow-sm p-5">
+            <div
+              className="bg-white border border-[var(--border-default)] rounded-xl shadow-sm p-5"
+              ref={(el) => { sectionRefs.current['identify_need'] = el; }}
+            >
               <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Procurement Details</h2>
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-start gap-2">
@@ -264,7 +284,10 @@ export default function ProcurementDetailPage({ params }: { params: Promise<{ id
 
             {/* Bids */}
             {bids.length > 0 && (
-              <div className="bg-white border border-[var(--border-default)] rounded-xl shadow-sm p-5">
+              <div
+                className="bg-white border border-[var(--border-default)] rounded-xl shadow-sm p-5"
+                ref={(el) => { sectionRefs.current['assess'] = el; sectionRefs.current['source'] = el; }}
+              >
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-sm font-semibold text-[var(--text-primary)]">Bids Received ({bids.length})</h2>
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getStatusColor(procurement.status)}`}>
@@ -279,7 +302,10 @@ export default function ProcurementDetailPage({ params }: { params: Promise<{ id
 
             {/* AI Evaluation Summary */}
             {recommendedBid?.ai_score && (
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl shadow-sm p-5">
+              <div
+                className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl shadow-sm p-5"
+                ref={(el) => { sectionRefs.current['recommend'] = el; sectionRefs.current['approve'] = el; }}
+              >
                 <div className="flex items-center gap-2 mb-3">
                   <Bot className="w-5 h-5 text-[var(--brand-blue)]" />
                   <h2 className="text-sm font-semibold text-[var(--brand-blue)]">AI Evaluation Summary</h2>
@@ -321,7 +347,10 @@ export default function ProcurementDetailPage({ params }: { params: Promise<{ id
           {/* Right — 1/3 */}
           <div className="w-72 shrink-0 space-y-4">
             {/* Approval chain */}
-            <div className="bg-white border border-[var(--border-default)] rounded-xl shadow-sm p-4">
+            <div
+              className="bg-white border border-[var(--border-default)] rounded-xl shadow-sm p-4"
+              ref={(el) => { sectionRefs.current['approve'] = sectionRefs.current['approve'] ?? el; }}
+            >
               <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-3">Approval Chain</h2>
               <div>
                 {procurement.approval_chain.map((step) => (
